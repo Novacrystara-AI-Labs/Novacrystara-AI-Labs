@@ -94,7 +94,7 @@ function HeroStatic() {
               <Globe className="size-4 lg:size-5" />
             </div>
           </div>
-          <p className="text-pretty text-lg text-foreground lg:text-xl font-normal leading-normal text-left whitespace-pre-line">{hero.summary}</p>
+          <p className="text-pretty text-xl sm:text-2xl lg:text-3xl font-semibold leading-[1.25] tracking-tight text-foreground text-left whitespace-pre-line">{hero.summary}</p>
         </div>
 
         {/* Block 3: Visual (Brain + Hexagons) */}
@@ -160,13 +160,13 @@ function HeroAnimated() {
   const block2Bg = useTransform(scrollYProgress, [0, 0.70], ["#f4f7f4", "#ffffff"]);
 
   // Block 2 Text Wrapper dynamic layout coordinates:
-  // - Stage 2 (scroll 0.30): moves slightly up and right (from 2.5rem to 4rem) to take a gap
+  // - Stage 2 (scroll 0.30): moves slightly up and right (from 1.75rem to 3rem) to take a gap
   // - Stage 6 (scroll 0.70): centers completely (50%, translateX -50%, translateY 50%)
-  const textLeft = useTransform(scrollYProgress, [0, 0.30, 0.70], ["2.5rem", "4rem", "50%"]);
-  const textBottom = useTransform(scrollYProgress, [0, 0.30, 0.70], ["2.5rem", "4rem", "50%"]);
+  const textLeft = useTransform(scrollYProgress, [0, 0.30, 0.70], ["1.75rem", "3rem", "50%"]);
+  const textBottom = useTransform(scrollYProgress, [0, 0.30, 0.70], ["1.75rem", "3rem", "50%"]);
   const textTranslateX = useTransform(scrollYProgress, [0, 0.30, 0.70], ["0%", "0%", "-50%"]);
   const textTranslateY = useTransform(scrollYProgress, [0, 0.30, 0.70], ["0%", "0%", "50%"]);
-  const textMaxWidth = useTransform(scrollYProgress, [0, 0.30, 0.70], ["360px", "360px", "900px"]);
+  const textMaxWidth = useTransform(scrollYProgress, [0, 0.30, 0.70], ["480px", "480px", "900px"]);
 
   // Tech Icons slide up and fade in above the text as scroll progresses
   const iconsOpacity = useTransform(scrollYProgress, [0.15, 0.40], [0, 1]);
@@ -252,7 +252,7 @@ function HeroAnimated() {
                 translateY: textTranslateY,
                 maxWidth: textMaxWidth,
               }}
-              className="absolute top-auto right-auto w-full flex flex-col items-start justify-end px-6 md:px-12"
+              className="absolute top-auto right-auto w-full flex flex-col items-start justify-end"
             >
               {/* Tech Icons sliding up and fading in */}
               <motion.div
@@ -284,10 +284,8 @@ function HeroAnimated() {
 
               <p
                 className={cn(
-                  "text-foreground transition-all duration-700 ease-nova text-pretty w-full leading-relaxed whitespace-pre-line",
-                  isExpanded
-                    ? "text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-center tracking-tight text-foreground/95"
-                    : "text-lg lg:text-xl font-normal text-left"
+                  "text-foreground transition-all duration-700 ease-nova text-pretty w-full leading-[1.25] tracking-tight whitespace-pre-line font-semibold text-xl sm:text-2xl lg:text-3xl xl:text-4xl",
+                  isExpanded ? "text-center" : "text-left"
                 )}
               >
                 {hero.summary}
