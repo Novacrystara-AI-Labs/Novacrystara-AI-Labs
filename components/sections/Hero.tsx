@@ -206,14 +206,18 @@ function HeroAnimated() {
           </motion.div>
         </motion.div>
 
-        {/* Block 3 (Bottom-Left) - Brain Visual */}
+        {/* Block 3 (Bottom-Left) - Code Globe Visual.
+            The outer block animates its WIDTH (the reveal "window"), but the
+            inner content keeps a FIXED width (= the initial 2/3 viewport) so it
+            never reflows/compresses while scrolling — the shrinking window just
+            clips it. This prevents the tiles from sliding over the globe. */}
         <motion.div
           style={{ width: leftWidth }}
           className="absolute left-0 top-1/2 h-1/2 overflow-hidden bg-black"
         >
-          <motion.div 
-            style={{ x: block3X, y: block3Y, opacity: block3Opacity }}
-            className="w-full h-full"
+          <motion.div
+            style={{ x: block3X, y: block3Y, opacity: block3Opacity, width: "66.6667vw" }}
+            className="h-full"
           >
             <HeroVisual />
           </motion.div>
