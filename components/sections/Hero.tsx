@@ -159,24 +159,26 @@ function HeroAnimated() {
   // Block 2 background color transition: light grey to white
   const block2Bg = useTransform(scrollYProgress, [0, 0.70], ["#f4f7f4", "#ffffff"]);
 
-  // Block 2 Text Wrapper dynamic layout coordinates:
-  // - Stage 2 (scroll 0.30): moves slightly up and right (from 1.75rem to 3rem) to take a gap
-  // - Stage 6 (scroll 0.70): centers completely (50%, translateX -50%, translateY 50%)
-  const textLeft = useTransform(scrollYProgress, [0, 0.30, 0.70], ["1.75rem", "3rem", "50%"]);
-  const textBottom = useTransform(scrollYProgress, [0, 0.30, 0.70], ["1.75rem", "3rem", "50%"]);
-  const textTranslateX = useTransform(scrollYProgress, [0, 0.30, 0.70], ["0%", "0%", "-50%"]);
-  const textTranslateY = useTransform(scrollYProgress, [0, 0.30, 0.70], ["0%", "0%", "50%"]);
-  const textMaxWidth = useTransform(scrollYProgress, [0, 0.30, 0.70], ["480px", "480px", "900px"]);
+  // Block 2 text wrapper is kept PERFECTLY centered inside its container at all
+  // times (top:50% / left:50% / translate(-50%,-50%)). Because the container
+  // itself animates from the top-right quadrant out to the full viewport, the
+  // centered content glides smoothly to the exact viewport center — no
+  // unit-mixing, no discrete jumps, guaranteed perfect final alignment.
+  // We only interpolate the readable max-width (single unit → smooth).
+  const textMaxWidth = useTransform(scrollYProgress, [0, 0.70], [440, 880]);
 
-  // Tech Icons slide up and fade in above the text as scroll progresses
-  const iconsOpacity = useTransform(scrollYProgress, [0.15, 0.40], [0, 1]);
-  const iconsTranslateY = useTransform(scrollYProgress, [0.15, 0.40], [20, 0]);
+  // Font-size grows smoothly from a small column-fit size to the large centered
+  // headline size as the block expands (matches the reference behaviour).
+  const textFontSize = useTransform(scrollYProgress, [0, 0.70], [20, 40]);
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  // Tech icons fade and scale in continuously above the text as scroll progresses.
+  const iconsOpacity = useTransform(scrollYProgress, [0.12, 0.45], [0, 1]);
+  const iconsScale = useTransform(scrollYProgress, [0.12, 0.70], [0.65, 1]);
+  const iconsTranslateY = useTransform(scrollYProgress, [0.12, 0.45], [16, 0]);
+
   const [isBorderVisible, setIsBorderVisible] = useState(true);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    setIsExpanded(latest >= 0.45);
     setIsBorderVisible(latest < 0.15);
   });
 
@@ -243,53 +245,35 @@ function HeroAnimated() {
           className="absolute top-0 overflow-hidden"
         >
           <div className="w-full h-full relative bg-transparent">
-            {/* Continuous animation of text box layout positioning */}
+            {/* Text wrapper stays perfectly centered inside this container the
+                entire time; the container's own expansion carries it smoothly
+                to the exact viewport center. */}
             <motion.div
-              style={{
-                left: textLeft,
-                bottom: textBottom,
-                translateX: textTranslateX,
-                translateY: textTranslateY,
-                maxWidth: textMaxWidth,
-              }}
-              className="absolute top-auto right-auto w-full flex flex-col items-start justify-end"
+              style={{ maxWidth: textMaxWidth }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-8 flex flex-col items-center"
             >
-              {/* Tech Icons sliding up and fading in */}
+              {/* Tech icons fade + scale in above the text */}
               <motion.div
-                style={{ opacity: iconsOpacity, y: iconsTranslateY }}
-                className={cn(
-                  "flex gap-4 mb-6 transition-all duration-700 ease-nova w-full",
-                  isExpanded ? "justify-center" : "justify-start"
-                )}
+                style={{ opacity: iconsOpacity, scale: iconsScale, y: iconsTranslateY }}
+                className="flex gap-4 mb-6 justify-center origin-bottom"
               >
-                <div className={cn(
-                  "bg-[#c27629]/15 text-[#c27629] flex items-center justify-center transition-all duration-700 ease-nova shadow-sm",
-                  isExpanded ? "size-12 md:size-16 rounded-2xl" : "size-8 rounded-lg"
-                )}>
-                  <Briefcase className={cn("transition-all duration-700 ease-nova", isExpanded ? "size-5 md:size-8" : "size-4 lg:size-5")} />
+                <div className="size-12 md:size-14 rounded-2xl bg-[#c27629]/15 text-[#c27629] flex items-center justify-center shadow-sm">
+                  <Briefcase className="size-5 md:size-7" />
                 </div>
-                <div className={cn(
-                  "bg-[#1b73e8]/15 text-[#1b73e8] flex items-center justify-center transition-all duration-700 ease-nova shadow-sm",
-                  isExpanded ? "size-12 md:size-16 rounded-2xl" : "size-8 rounded-lg"
-                )}>
-                  <Bot className={cn("transition-all duration-700 ease-nova", isExpanded ? "size-5 md:size-8" : "size-4 lg:size-5")} />
+                <div className="size-12 md:size-14 rounded-2xl bg-[#1b73e8]/15 text-[#1b73e8] flex items-center justify-center shadow-sm">
+                  <Bot className="size-5 md:size-7" />
                 </div>
-                <div className={cn(
-                  "bg-[#0f9d58]/15 text-[#0f9d58] flex items-center justify-center transition-all duration-700 ease-nova shadow-sm",
-                  isExpanded ? "size-12 md:size-16 rounded-2xl" : "size-8 rounded-lg"
-                )}>
-                  <Globe className={cn("transition-all duration-700 ease-nova", isExpanded ? "size-5 md:size-8" : "size-4 lg:size-5")} />
+                <div className="size-12 md:size-14 rounded-2xl bg-[#0f9d58]/15 text-[#0f9d58] flex items-center justify-center shadow-sm">
+                  <Globe className="size-5 md:size-7" />
                 </div>
               </motion.div>
 
-              <p
-                className={cn(
-                  "text-foreground transition-all duration-700 ease-nova text-pretty w-full leading-[1.25] tracking-tight whitespace-pre-line font-semibold text-xl sm:text-2xl lg:text-3xl xl:text-4xl",
-                  isExpanded ? "text-center" : "text-left"
-                )}
+              <motion.p
+                style={{ fontSize: textFontSize }}
+                className="text-foreground text-pretty w-full text-center leading-[1.25] tracking-tight whitespace-pre-line font-semibold"
               >
                 {hero.summary}
-              </p>
+              </motion.p>
             </motion.div>
           </div>
         </motion.div>
