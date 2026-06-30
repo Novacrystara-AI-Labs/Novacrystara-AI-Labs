@@ -2,7 +2,7 @@ import type { DifferentiatorContent } from "@/types";
 
 // SECTION 3 — Differentiators (copy §3)
 export const differentiators: DifferentiatorContent = {
-  heading: "Built by enterprise IT veterans. Engineered for enterprise reality.",
+  heading: "Engineered for Enterprise Reality.",
   intro:
     "NovaCrystara AI Labs was founded on a simple belief: AI transformation succeeds or fails based on the same disciplines that have always governed great enterprise IT delivery — sound architecture, rigorous quality, and relentless focus on outcomes. We bring that discipline to every engagement.",
   pillars: [

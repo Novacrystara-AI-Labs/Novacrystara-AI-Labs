@@ -2,7 +2,7 @@ import type { SolutionsContent } from "@/types";
 
 // SECTION 4 — Solutions (copy §4)
 export const solutions: SolutionsContent = {
-  heading: "From intelligent agents to enterprise-wide AI platforms.",
+  heading: "Enterprise-Wide AI Solutions.",
   intro:
     "We design and build the full spectrum of enterprise AI solutions — meeting you wherever you are in your AI journey.",
   solutions: [

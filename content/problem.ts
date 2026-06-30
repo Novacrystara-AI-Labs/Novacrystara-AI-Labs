@@ -2,7 +2,7 @@ import type { ProblemContent } from "@/types";
 
 // SECTION 2 — The Problem (copy §2)
 export const problem: ProblemContent = {
-  heading: "Everyone's racing toward AI. Few are reaching production.",
+  heading: "Racing to AI. Missing Production.",
   intro:
     'Enterprises today aren\'t short on AI ambition — they\'re short on AI outcomes. Pilots stall before they scale. Proofs-of-concept impress in a demo and collapse under real data, real users, and real compliance requirements. Teams are left juggling fragmented tools, unclear ROI, and growing pressure to "do something with AI" without a clear path to value.',
   painPoints: [
