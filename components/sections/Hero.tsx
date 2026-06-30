@@ -28,6 +28,13 @@ function Headline() {
 }
 
 function Actions({ stacked = true }: { stacked?: boolean }) {
+  // Sharp-edged CTAs with a hard offset-shadow "lift" hover (suits the square corners).
+  const sharp =
+    "rounded-none transition-all duration-200 ease-nova hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0 active:translate-y-0 active:shadow-none";
+  const hover = [
+    "hover:shadow-[5px_5px_0_0_var(--accent-strong)]",
+    "hover:shadow-[5px_5px_0_0_var(--accent)] hover:bg-accent/[0.06]",
+  ];
   return (
     <div className={cn("flex gap-3", stacked ? "flex-col w-full" : "flex-wrap justify-center")}>
       {hero.ctas.map((c, i) => (
@@ -35,7 +42,7 @@ function Actions({ stacked = true }: { stacked?: boolean }) {
           key={c.label}
           href={c.href}
           variant={i === 0 ? "primary" : "secondary"}
-          className={stacked ? "w-full" : undefined}
+          className={cn(sharp, hover[i] ?? hover[1], stacked && "w-full")}
         >
           {c.label}
         </Button>

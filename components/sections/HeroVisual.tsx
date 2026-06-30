@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
 import { Layers, Bot, Puzzle, Cloud } from "lucide-react";
+import { CodeGlobe } from "./CodeGlobe";
 
 interface HexItemProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -65,30 +64,16 @@ export function HeroVisual() {
           />
         </div>
 
-        {/* Center Column - Brain and pedestal */}
-        <div className="lg:col-span-6 flex flex-col items-center justify-center relative w-full h-[220px] lg:h-[280px] order-1 lg:order-2">
-          {/* Glowing Pedestal */}
-          <div className="absolute bottom-[5%] lg:bottom-[10%] left-1/2 -translate-x-1/2 w-[220px] h-[30px] flex flex-col items-center justify-center [perspective:800px] pointer-events-none z-0">
-            <div className="absolute w-[180px] h-[25px] bg-[#4e8f52]/25 rounded-full blur-xl -translate-y-2 animate-pulse" />
-            <div className="absolute w-[160px] h-[20px] border-2 border-[#4e8f52]/30 rounded-full [transform:rotateX(75deg)] shadow-[0_0_12px_rgba(78,143,82,0.25)]" />
-            <div className="absolute w-[100px] h-[14px] border border-[#4e8f52]/50 rounded-full [transform:rotateX(75deg)] -translate-y-1" />
-            <div className="absolute w-[50px] h-[8px] border border-[#4e8f52]/70 rounded-full [transform:rotateX(75deg)] -translate-y-1.5" />
-          </div>
+        {/* Center Column - Animated code-particle globe */}
+        <div className="lg:col-span-6 flex flex-col items-center justify-center relative w-full h-[260px] lg:h-[360px] order-1 lg:order-2">
+          {/* Core radial glow behind the globe */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] h-[240px] bg-[#4e8f52]/12 rounded-full blur-[70px] pointer-events-none" />
 
-          {/* Floating Brain Image */}
-          <motion.div
-            animate={{ y: [-5, 5, -5] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="relative z-10 w-[180px] lg:w-[240px] h-[180px] lg:h-[240px] flex items-center justify-center pointer-events-none"
-          >
-            <Image
-              src="/images/glowing_green_brain.png"
-              alt="Neural Brain Network"
-              width={240}
-              height={240}
-              className="object-contain filter drop-shadow-[0_0_20px_rgba(78,143,82,0.45)] scale-90 lg:scale-100"
-            />
-          </motion.div>
+          {/* Interactive code globe (auto-rotates; cursor steers it horizontally) */}
+          <CodeGlobe className="absolute inset-0 z-10 cursor-ew-resize" />
+
+          {/* Vignette to fade characters into the black block edges */}
+          <div className="absolute inset-0 z-[11] pointer-events-none [background:radial-gradient(circle_at_center,transparent_55%,#000_92%)]" />
         </div>
 
         {/* Right Column - Hexagons */}
