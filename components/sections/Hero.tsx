@@ -14,9 +14,6 @@ import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { HeroVisual } from "./HeroVisual";
 
-// Split the headline so the highlight phrase renders in the accent color.
-const prefix = hero.headline.replace(hero.headlineHighlight, "");
-
 // Header margin height (4rem = 64px) to ensure no scroll overlap.
 function Headline() {
   return (
@@ -97,7 +94,7 @@ function HeroStatic() {
               <Globe className="size-4 lg:size-5" />
             </div>
           </div>
-          <p className="text-pretty text-lg text-foreground lg:text-xl font-normal leading-normal text-left">{hero.summary}</p>
+          <p className="text-pretty text-lg text-foreground lg:text-xl font-normal leading-normal text-left whitespace-pre-line">{hero.summary}</p>
         </div>
 
         {/* Block 3: Visual (Brain + Hexagons) */}
@@ -169,7 +166,7 @@ function HeroAnimated() {
   const textBottom = useTransform(scrollYProgress, [0, 0.30, 0.70], ["2.5rem", "4rem", "50%"]);
   const textTranslateX = useTransform(scrollYProgress, [0, 0.30, 0.70], ["0%", "0%", "-50%"]);
   const textTranslateY = useTransform(scrollYProgress, [0, 0.30, 0.70], ["0%", "0%", "50%"]);
-  const textMaxWidth = useTransform(scrollYProgress, [0, 0.30, 0.70], ["360px", "360px", "1100px"]);
+  const textMaxWidth = useTransform(scrollYProgress, [0, 0.30, 0.70], ["360px", "360px", "900px"]);
 
   // Tech Icons slide up and fade in above the text as scroll progresses
   const iconsOpacity = useTransform(scrollYProgress, [0.15, 0.40], [0, 1]);
@@ -267,30 +264,30 @@ function HeroAnimated() {
               >
                 <div className={cn(
                   "bg-[#c27629]/15 text-[#c27629] flex items-center justify-center transition-all duration-700 ease-nova shadow-sm",
-                  isExpanded ? "size-14 md:size-20 rounded-2xl" : "size-8 rounded-lg"
+                  isExpanded ? "size-12 md:size-16 rounded-2xl" : "size-8 rounded-lg"
                 )}>
-                  <Briefcase className={cn("transition-all duration-700 ease-nova", isExpanded ? "size-6 md:size-10" : "size-4 lg:size-5")} />
+                  <Briefcase className={cn("transition-all duration-700 ease-nova", isExpanded ? "size-5 md:size-8" : "size-4 lg:size-5")} />
                 </div>
                 <div className={cn(
                   "bg-[#1b73e8]/15 text-[#1b73e8] flex items-center justify-center transition-all duration-700 ease-nova shadow-sm",
-                  isExpanded ? "size-14 md:size-20 rounded-2xl" : "size-8 rounded-lg"
+                  isExpanded ? "size-12 md:size-16 rounded-2xl" : "size-8 rounded-lg"
                 )}>
-                  <Bot className={cn("transition-all duration-700 ease-nova", isExpanded ? "size-6 md:size-10" : "size-4 lg:size-5")} />
+                  <Bot className={cn("transition-all duration-700 ease-nova", isExpanded ? "size-5 md:size-8" : "size-4 lg:size-5")} />
                 </div>
                 <div className={cn(
                   "bg-[#0f9d58]/15 text-[#0f9d58] flex items-center justify-center transition-all duration-700 ease-nova shadow-sm",
-                  isExpanded ? "size-14 md:size-20 rounded-2xl" : "size-8 rounded-lg"
+                  isExpanded ? "size-12 md:size-16 rounded-2xl" : "size-8 rounded-lg"
                 )}>
-                  <Globe className={cn("transition-all duration-700 ease-nova", isExpanded ? "size-6 md:size-10" : "size-4 lg:size-5")} />
+                  <Globe className={cn("transition-all duration-700 ease-nova", isExpanded ? "size-5 md:size-8" : "size-4 lg:size-5")} />
                 </div>
               </motion.div>
 
               <p
                 className={cn(
-                  "text-foreground transition-all duration-700 ease-nova text-pretty w-full leading-tight",
+                  "text-foreground transition-all duration-700 ease-nova text-pretty w-full leading-relaxed whitespace-pre-line",
                   isExpanded
-                    ? "text-xl md:text-3xl lg:text-5xl xl:text-6xl font-bold text-center tracking-tight"
-                    : "text-lg lg:text-xl font-normal text-left leading-relaxed"
+                    ? "text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-center tracking-tight text-foreground/95"
+                    : "text-lg lg:text-xl font-normal text-left"
                 )}
               >
                 {hero.summary}
