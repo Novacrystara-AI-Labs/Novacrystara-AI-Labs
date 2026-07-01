@@ -44,7 +44,7 @@ export function FeatureCard({
       <h3 className="mt-4 text-lg font-semibold tracking-tight text-white transition-colors duration-300 group-hover:text-[#a6e8b1]">
         {pillar.title}
       </h3>
-      <p className="mt-2.5 text-pretty text-sm leading-relaxed text-white/55">
+      <p className="mt-2.5 text-pretty text-sm leading-relaxed text-white/85">
         {pillar.description}
       </p>
     </SpotlightCard>

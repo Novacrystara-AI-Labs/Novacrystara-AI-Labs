@@ -21,7 +21,8 @@
   --color-verdant-200: #bfd8c1;
   --color-ink: #000000;
   --color-snow: #ffffff;
-  --color-mist: #6b776d;
+  /* Body/label grey resolved to black per design direction (dark blocks use white/xx). */
+  --color-mist: #000000;
 
   /* Typography — Geist → Arial → sans-serif */
   --font-sans: var(--font-geist-sans), Arial, sans-serif;
@@ -55,7 +56,8 @@
   --foreground: #000000;
   --surface: #ffffff;
   --surface-raised: #f4f7f4;
-  --muted: #6b776d;
+  /* Body text is now fully black across light sections (dark blocks use white). */
+  --muted: #000000;
   --border: #e3eae3;
   --accent: #4e8f52;
   --accent-strong: #3e7242;

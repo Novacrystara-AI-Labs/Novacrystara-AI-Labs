@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { cta } from "@/content/cta";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
+import { ScrollGrowPanel } from "@/components/ui/ScrollGrowPanel";
 import { cn } from "@/lib/utils";
 import { ContactForm } from "./ContactForm";
 
@@ -11,7 +12,10 @@ export function CTASection() {
   return (
     <section id="contact" className="scroll-mt-24 py-16 md:py-24">
       <Container>
-        <Reveal className="relative overflow-hidden rounded-none border border-white/10 bg-ink px-6 py-16 text-center text-white sm:px-12 sm:py-20">
+        <ScrollGrowPanel
+          from={0.7}
+          className="relative overflow-hidden rounded-none border border-white/10 bg-ink px-6 py-16 text-center text-white shadow-[0_50px_140px_-40px_rgba(78,143,82,0.4)] sm:px-12 sm:py-20"
+        >
           {/* Ambient: dotted grid + green aurora glows */}
           <div aria-hidden className="pointer-events-none absolute inset-0">
             <div className="bg-dotgrid-dark mask-radial-fade absolute inset-0 opacity-50" />
@@ -31,7 +35,7 @@ export function CTASection() {
             <h2 className="mx-auto mt-6 max-w-3xl text-balance text-h1 font-semibold text-white">
               {cta.heading}
             </h2>
-            <p className="mx-auto mt-5 max-w-2xl text-pretty text-lg text-white/65">{cta.body}</p>
+            <p className="mx-auto mt-5 max-w-2xl text-pretty text-lg text-white/90">{cta.body}</p>
 
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
               {cta.ctas.map((c, i) => (
@@ -54,11 +58,11 @@ export function CTASection() {
               ))}
             </div>
 
-            <p className="mx-auto mt-6 max-w-xl text-pretty text-sm text-white/45">
+            <p className="mx-auto mt-6 max-w-xl text-pretty text-sm text-white/80">
               {cta.reassurance}
             </p>
           </div>
-        </Reveal>
+        </ScrollGrowPanel>
 
         <Reveal className="mx-auto mt-10 max-w-2xl">
           <ContactForm />

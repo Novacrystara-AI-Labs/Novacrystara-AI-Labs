@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef, useState, type KeyboardEvent } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import {
   Wrench,
@@ -13,6 +15,8 @@ import {
   Check,
   TrendingUp,
   Sparkles,
+  ArrowRight,
+  ChevronLeft,
   ChevronRight,
   type LucideIcon,
 } from "lucide-react";
@@ -20,7 +24,14 @@ import { useCases } from "@/content/useCases";
 import { Section } from "@/components/ui/Section";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
+import { CodeParticles } from "@/components/ui/CodeParticles";
 import { cn } from "@/lib/utils";
+
+// Per-use-case hero artwork (right panel). Tabs without one fall back to the
+// generated visual. Add more as artwork is provided.
+const useCaseImages: Record<string, string> = {
+  "autonomous-maintenance-agent": "/images/use_cases/Autonomous_agent_1.png",
+};
 
 const icons: Record<string, LucideIcon> = {
   wrench: Wrench,
@@ -32,20 +43,30 @@ const icons: Record<string, LucideIcon> = {
   target: Target,
 };
 
+const leftV: Variants = {
+  initial: { opacity: 0, y: 18 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+  exit: { opacity: 0, y: -12, transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] } },
+};
+const rightV: Variants = {
+  initial: { opacity: 0, x: 28, scale: 0.985 },
+  animate: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+  exit: { opacity: 0, x: -18, transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] } },
+};
 const listStagger: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.04, delayChildren: 0.05 } },
+  animate: { transition: { staggerChildren: 0.035, delayChildren: 0.08 } },
 };
 const listItem: Variants = {
-  hidden: { opacity: 0, x: -8 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
+  initial: { opacity: 0, x: -8 },
+  animate: { opacity: 1, x: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } },
 };
 
 /**
  * SECTION 5 — Enterprise AI Use Cases (arch §5 #5, §7).
- * Interactive explorer: a vertical rail of the seven use cases (horizontal chip
- * scroller on mobile) drives an animated detail panel with full intro,
- * capabilities and benefits. Full ARIA tab semantics + arrow-key navigation.
+ * Product-style explorer: a horizontal tab bar (sliding accent underline) drives
+ * a two-column stage — left = narrative + capabilities + CTA, right = a dark
+ * visual panel with a floating "Business Outcomes" card. Everything crossfades
+ * smoothly on tab change. Full ARIA tab semantics + arrow-key navigation.
  */
 export function UseCasesSection() {
   const [active, setActive] = useState(0);
@@ -54,44 +75,63 @@ export function UseCasesSection() {
   const items = useCases.useCases;
   const uc = items[active];
   const Icon = icons[uc.icon] ?? Sparkles;
+  const image = useCaseImages[uc.id];
+
+  function select(i: number) {
+    setActive(i);
+    tabsRef.current[i]?.focus();
+    tabsRef.current[i]?.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+  }
 
   function onKeyDown(e: KeyboardEvent) {
     const last = items.length - 1;
-    let next = active;
-    if (e.key === "ArrowDown" || e.key === "ArrowRight") next = active === last ? 0 : active + 1;
-    else if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = active === 0 ? last : active - 1;
-    else if (e.key === "Home") next = 0;
-    else if (e.key === "End") next = last;
-    else return;
-    e.preventDefault();
-    setActive(next);
-    tabsRef.current[next]?.focus();
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      select(active === last ? 0 : active + 1);
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      select(active === 0 ? last : active - 1);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      select(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      select(last);
+    }
   }
 
   return (
     <Section id="use-cases" className="relative overflow-hidden bg-surface">
       <div
         aria-hidden
-        className="bg-dotgrid mask-fade-b pointer-events-none absolute inset-0 -z-10 opacity-40"
+        className="bg-dotgrid mask-fade-b pointer-events-none absolute inset-0 z-0 opacity-40"
       />
 
-      <Reveal className="max-w-3xl">
-        <Eyebrow label="Use Cases" index={5} />
-        <h2 className="mt-5 text-balance text-h2 font-semibold">{useCases.heading}</h2>
-        <p className="mt-4 text-pretty text-lg text-muted">{useCases.tagline}</p>
-      </Reveal>
+      <div className="relative z-10">
+        <Reveal className="max-w-3xl">
+          <Eyebrow label="Use Cases" />
+          <h2 className="mt-5 text-balance text-h2 font-semibold">{useCases.heading}</h2>
+          <p className="mt-4 text-pretty text-lg text-muted">{useCases.tagline}</p>
+        </Reveal>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,22rem)_1fr]">
-        {/* Rail / chip scroller */}
-        <div
-          role="tablist"
-          aria-label="Enterprise AI use cases"
-          aria-orientation="vertical"
-          onKeyDown={onKeyDown}
-          className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
+        {/* Tab bar with prev/next controls (works across mobile · tablet · desktop) */}
+        <div className="mt-10 flex items-center gap-1 border-b border-border">
+          <button
+            type="button"
+            aria-label="Previous use case"
+            onClick={() => select(active === 0 ? items.length - 1 : active - 1)}
+            className="flex size-9 shrink-0 items-center justify-center border border-border text-muted transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <ChevronLeft aria-hidden className="size-4" />
+          </button>
+
+          <div
+            role="tablist"
+            aria-label="Enterprise AI use cases"
+            onKeyDown={onKeyDown}
+            className="flex flex-1 gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
           {items.map((item, i) => {
-            const TabIcon = icons[item.icon] ?? Sparkles;
             const selected = i === active;
             return (
               <button
@@ -102,92 +142,61 @@ export function UseCasesSection() {
                 role="tab"
                 id={`uc-tab-${item.id}`}
                 aria-selected={selected}
-                aria-controls={`uc-panel-${item.id}`}
+                aria-controls="uc-panel"
                 tabIndex={selected ? 0 : -1}
-                onClick={() => setActive(i)}
+                onClick={() => select(i)}
                 className={cn(
-                  "group relative flex shrink-0 items-center gap-3 rounded-none border px-4 py-3 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:w-full",
-                  selected
-                    ? "border-accent/40 bg-white shadow-[0_8px_28px_rgba(78,143,82,0.1)]"
-                    : "border-transparent bg-white/40 hover:border-border hover:bg-white",
+                  "relative shrink-0 whitespace-nowrap px-4 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                  selected ? "text-foreground" : "text-muted hover:text-foreground",
                 )}
               >
-                {/* Active left bar (desktop) */}
-                <span
-                  aria-hidden
-                  className={cn(
-                    "absolute left-0 top-1/2 hidden h-7 w-1 -translate-y-1/2 rounded-r-full bg-accent transition-all duration-300 lg:block",
-                    selected ? "opacity-100" : "opacity-0",
-                  )}
-                />
-                <span
-                  className={cn(
-                    "inline-flex size-9 shrink-0 items-center justify-center rounded-none transition-all duration-300",
-                    selected
-                      ? "bg-accent text-white"
-                      : "bg-accent/10 text-accent group-hover:bg-accent/20",
-                  )}
-                >
-                  <TabIcon aria-hidden className="size-5" />
-                </span>
-                <span className="min-w-0">
-                  <span
-                    className={cn(
-                      "block whitespace-nowrap text-sm font-semibold tracking-tight transition-colors lg:whitespace-normal",
-                      selected ? "text-accent" : "text-foreground",
-                    )}
-                  >
-                    {item.title}
-                  </span>
-                  <span className="mt-0.5 hidden text-xs text-muted lg:line-clamp-1 lg:block">
-                    {item.tagline}
-                  </span>
-                </span>
-                <ChevronRight
-                  aria-hidden
-                  className={cn(
-                    "ml-auto hidden size-4 shrink-0 text-accent transition-all duration-300 lg:block",
-                    selected ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0",
-                  )}
-                />
+                {item.title}
+                {selected ? (
+                  <motion.span
+                    layoutId="uc-underline"
+                    className="absolute inset-x-2 -bottom-px h-0.5 bg-accent"
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                ) : null}
               </button>
             );
           })}
+          </div>
+
+          <button
+            type="button"
+            aria-label="Next use case"
+            onClick={() => select(active === items.length - 1 ? 0 : active + 1)}
+            className="flex size-9 shrink-0 items-center justify-center border border-border text-muted transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <ChevronRight aria-hidden className="size-4" />
+          </button>
         </div>
 
-        {/* Detail panel */}
-        <div className="relative min-h-[26rem] rounded-none border border-border bg-white p-6 shadow-[0_8px_40px_rgba(0,0,0,0.03)] sm:p-8">
-          {/* Corner watermark index */}
-          <span className="pointer-events-none absolute right-6 top-5 font-mono text-xs tracking-widest text-muted/60">
-            {String(active + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
-          </span>
-
+        {/* Stage */}
+        <div
+          id="uc-panel"
+          role="tabpanel"
+          aria-labelledby={`uc-tab-${uc.id}`}
+          className="mt-10 grid items-stretch gap-8 lg:grid-cols-2 lg:gap-12"
+        >
+          {/* Left — narrative */}
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={uc.id}
-              id={`uc-panel-${uc.id}`}
-              role="tabpanel"
-              aria-labelledby={`uc-tab-${uc.id}`}
-              initial={reduce ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduce ? undefined : { opacity: 0, y: -8 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              variants={reduce ? undefined : leftV}
+              initial={reduce ? undefined : "initial"}
+              animate={reduce ? undefined : "animate"}
+              exit={reduce ? undefined : "exit"}
             >
-              <div className="flex items-start gap-4">
-                <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-none bg-accent/10 text-accent shadow-sm">
-                  <Icon aria-hidden className="size-7" />
-                </span>
-                <div className="pr-16">
-                  <span className="inline-flex rounded-none bg-accent/10 px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-accent">
-                    {uc.tagline}
-                  </span>
-                  <h3 className="mt-2 text-balance text-2xl font-bold tracking-tight text-foreground">
-                    {uc.title}
-                  </h3>
-                </div>
-              </div>
+              <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                {uc.tagline}
+              </p>
+              <h3 className="mt-3 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                {uc.title}
+              </h3>
 
-              <div className="mt-6 space-y-3 border-l-2 border-accent/20 pl-5">
+              <div className="mt-5 space-y-3 border-l-2 border-accent/25 pl-5">
                 {uc.intro.map((p) => (
                   <p key={p} className="text-pretty leading-relaxed text-muted">
                     {p}
@@ -195,53 +204,118 @@ export function UseCasesSection() {
                 ))}
               </div>
 
-              <div className="mt-8 grid gap-8 md:grid-cols-2">
-                <div>
-                  <h4 className="font-mono text-xs uppercase tracking-widest text-accent">
-                    Key Capabilities
-                  </h4>
-                  <motion.ul
-                    variants={reduce ? undefined : listStagger}
-                    initial={reduce ? undefined : "hidden"}
-                    animate={reduce ? undefined : "show"}
-                    className="mt-4 space-y-2.5"
+              <h4 className="mt-8 font-mono text-xs uppercase tracking-widest text-accent">
+                Key Capabilities
+              </h4>
+              <motion.ul
+                variants={reduce ? undefined : listStagger}
+                initial={reduce ? undefined : "initial"}
+                animate={reduce ? undefined : "animate"}
+                className="mt-4 grid gap-x-6 gap-y-2.5 sm:grid-cols-2"
+              >
+                {uc.capabilities.map((c) => (
+                  <motion.li
+                    key={c}
+                    variants={reduce ? undefined : listItem}
+                    className="flex gap-2 text-pretty text-sm leading-relaxed text-muted"
                   >
-                    {uc.capabilities.map((c) => (
-                      <motion.li
-                        key={c}
-                        variants={reduce ? undefined : listItem}
-                        className="flex gap-2.5 text-pretty text-sm leading-relaxed text-muted"
-                      >
-                        <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
-                        <span>{c}</span>
-                      </motion.li>
-                    ))}
-                  </motion.ul>
-                </div>
+                    <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
+                    <span>{c}</span>
+                  </motion.li>
+                ))}
+              </motion.ul>
 
-                <div>
-                  <h4 className="font-mono text-xs uppercase tracking-widest text-accent">
-                    Business Benefits
-                  </h4>
-                  <motion.ul
-                    variants={reduce ? undefined : listStagger}
-                    initial={reduce ? undefined : "hidden"}
-                    animate={reduce ? undefined : "show"}
-                    className="mt-4 space-y-2.5"
-                  >
-                    {uc.benefits.map((b) => (
-                      <motion.li
-                        key={b}
-                        variants={reduce ? undefined : listItem}
-                        className="flex items-center gap-2.5 rounded-none bg-surface-raised px-3 py-2 text-pretty text-sm font-medium text-foreground"
-                      >
-                        <TrendingUp aria-hidden className="size-4 shrink-0 text-accent" />
-                        <span>{b}</span>
-                      </motion.li>
-                    ))}
-                  </motion.ul>
-                </div>
-              </div>
+              <Link
+                href="#contact"
+                className="group mt-8 inline-flex items-center gap-2 rounded-none bg-accent px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-accent-strong"
+              >
+                Book a discovery session
+                <ArrowRight
+                  aria-hidden
+                  className="size-4 transition-transform duration-300 group-hover:translate-x-0.5"
+                />
+              </Link>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Right — visual panel */}
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={uc.id}
+              variants={reduce ? undefined : rightV}
+              initial={reduce ? undefined : "initial"}
+              animate={reduce ? undefined : "animate"}
+              exit={reduce ? undefined : "exit"}
+              className={cn(
+                "relative overflow-hidden",
+                image
+                  ? "min-h-[460px] w-full bg-ink"
+                  : "flex min-h-[460px] flex-col justify-between border border-white/10 bg-[#0b1d11] p-8",
+              )}
+            >
+              {image ? (
+                <>
+                  <Image
+                    src={image}
+                    alt={uc.title}
+                    fill
+                    sizes="(min-width: 1024px) 45vw, 100vw"
+                    className="object-cover object-center"
+                  />
+                  {/* White fade — blends the top edge on mobile and the left edge on desktop */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-transparent to-transparent lg:bg-gradient-to-r lg:via-background/20"
+                  />
+                </>
+              ) : (
+                <>
+                  {/* Ambient */}
+                  <div aria-hidden className="pointer-events-none absolute inset-0">
+                    <div className="bg-blueprint-dark absolute inset-0 opacity-50" />
+                    <CodeParticles
+                      className="mask-radial-fade absolute inset-0"
+                      maxOpacity={0.08}
+                      density={0.0009}
+                    />
+                    <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(78,143,82,0.35),transparent_70%)] blur-2xl" />
+                  </div>
+
+                  {/* Top: icon + label */}
+                  <div className="relative">
+                    <span className="inline-flex size-16 items-center justify-center border border-[#7ed98d]/40 bg-[#7ed98d]/10 text-[#7ed98d] shadow-[0_0_30px_rgba(78,143,82,0.25)]">
+                      <Icon aria-hidden className="size-8" />
+                    </span>
+                    <p className="mt-6 max-w-xs font-mono text-xs uppercase tracking-[0.2em] text-white/45">
+                      Enterprise-grade · production-ready
+                    </p>
+                  </div>
+
+                  {/* Floating outcomes card */}
+                  <div className="relative mt-8 border border-black/5 bg-white p-6 shadow-[0_24px_60px_rgba(0,0,0,0.45)]">
+                    <div className="flex items-center gap-2">
+                      <span className="relative flex size-2">
+                        <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent/60" />
+                        <span className="relative inline-flex size-2 rounded-full bg-accent" />
+                      </span>
+                      <p className="font-mono text-xs font-semibold uppercase tracking-widest text-foreground">
+                        Business Outcomes
+                      </p>
+                    </div>
+                    <ul className="mt-4 space-y-3">
+                      {uc.benefits.map((b) => (
+                        <li
+                          key={b}
+                          className="flex items-center gap-3 text-sm font-medium text-foreground"
+                        >
+                          <TrendingUp aria-hidden className="size-4 shrink-0 text-accent" />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
