@@ -121,3 +121,132 @@
     transform: translateY(0);
   }
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   SIGNATURE UI SYSTEM — blueprint grids, green glow, beams, marquee, spotlight
+   (Inspired by Baseten's technical restraint + Mistral's dark accent drama,
+   recoloured entirely into the white / #4e8f52 / black palette.)
+   ────────────────────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Blueprint line grid — light surfaces */
+  .bg-blueprint {
+    background-image:
+      linear-gradient(to right, rgba(78, 143, 82, 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(78, 143, 82, 0.07) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /* Blueprint line grid — dark surfaces */
+  .bg-blueprint-dark {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /* Fine dotted grid */
+  .bg-dotgrid {
+    background-image: radial-gradient(rgba(78, 143, 82, 0.16) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .bg-dotgrid-dark {
+    background-image: radial-gradient(rgba(126, 217, 141, 0.16) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  /* Radial edge-fade masks (for grids / marquees) */
+  .mask-radial-fade {
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 40%, transparent 78%);
+    mask-image: radial-gradient(ellipse at center, #000 40%, transparent 78%);
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  }
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  }
+
+  /* Cursor-follow spotlight surface (consumes --mx / --my set in JS) */
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.35s var(--ease-nova);
+    background: radial-gradient(
+      340px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(78, 143, 82, 0.14),
+      transparent 65%
+    );
+    pointer-events: none;
+  }
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+  .spotlight-dark::before {
+    background: radial-gradient(
+      360px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(126, 217, 141, 0.16),
+      transparent 62%
+    );
+  }
+
+  .animate-marquee {
+    animation: marquee 38s linear infinite;
+  }
+  .animate-marquee-slow {
+    animation: marquee 60s linear infinite;
+  }
+  .group\/marquee:hover .animate-marquee,
+  .group\/marquee:hover .animate-marquee-slow {
+    animation-play-state: paused;
+  }
+
+  .animate-float {
+    animation: float 6s var(--ease-nova) infinite;
+  }
+  .animate-glow-pulse {
+    animation: glow-pulse 4s ease-in-out infinite;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes beam-sweep {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}

@@ -4,7 +4,7 @@ import type { SiteContent } from "@/types";
 export const site: SiteContent = {
   brand: "NovaCrystara AI Labs",
   // TODO: replace with the production domain before launch (used for metadata, sitemap, OG).
-  url: "https://novacrystara.ai",
+  url: "https://novacrystara.com",
   description:
     "Enterprise AI built by IT veterans — production-grade agents, platforms, and intelligent automation that deliver measurable outcomes, fast.",
   nav: [

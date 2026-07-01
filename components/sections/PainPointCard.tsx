@@ -1,36 +1,49 @@
-import { AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PainPoint } from "@/types";
 
 /**
  * A single enterprise AI pain point (arch §5 #2).
- * Sharp-edged bento cell: shares its borders with neighbours (no gaps) and uses
- * a color-change hover only — no scale/translate/shadow.
+ * Sharp-edged blueprint bento cell: shares dotted borders with neighbours (no
+ * gaps), a monospace index marker in the corner, and a green background that
+ * slides up on hover while the content lifts and recolours.
  */
 export function PainPointCard({
   painPoint,
+  index,
   className,
 }: {
   painPoint: PainPoint;
+  index: number;
   className?: string;
 }) {
   return (
     <div
       className={cn(
-        "group flex flex-col border-b border-r border-border bg-white p-6 transition-colors duration-300 hover:bg-accent/[0.06]",
-        className
+        "group relative flex flex-col overflow-hidden border-b border-r border-dotted border-zinc-300 bg-white p-6 transition-all duration-300 md:p-7",
+        className,
       )}
     >
-      <div className="inline-flex size-9 items-center justify-center border border-border text-accent transition-colors duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-white">
-        <AlertTriangle aria-hidden className="size-5" />
-      </div>
+      {/* Sliding-up green hover background overlay */}
+      <div className="pointer-events-none absolute inset-0 z-0 translate-y-full bg-[#e2f5e5] transition-transform duration-500 ease-nova group-hover:translate-y-0" />
 
-      <h3 className="mt-4 text-base font-bold tracking-tight text-foreground transition-colors duration-300 group-hover:text-accent">
-        {painPoint.title}
-      </h3>
-      <p className="mt-2 text-pretty text-sm leading-relaxed text-muted">
-        {painPoint.description}
-      </p>
+      {/* Corner index marker + crosshair tick */}
+      <span className="pointer-events-none absolute right-4 top-4 z-10 font-mono text-[11px] tracking-widest text-zinc-300 transition-colors duration-300 group-hover:text-accent">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+
+      {/* Content wrapper */}
+      <div className="relative z-10 flex h-full flex-col transition-transform duration-500 ease-nova group-hover:-translate-y-1">
+        <span
+          aria-hidden
+          className="mb-4 h-1.5 w-1.5 rounded-full bg-zinc-300 transition-all duration-300 group-hover:w-6 group-hover:bg-accent"
+        />
+        <h3 className="text-xl font-bold tracking-tight text-foreground transition-colors duration-300 group-hover:text-accent">
+          {painPoint.title}
+        </h3>
+        <p className="mt-2 text-pretty text-base leading-relaxed text-muted transition-colors duration-300 group-hover:text-foreground">
+          {painPoint.description}
+        </p>
+      </div>
     </div>
   );
 }

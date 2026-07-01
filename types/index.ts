@@ -80,6 +80,8 @@ export interface UseCasesContent {
 /* Section 6 — Methodology */
 export interface Phase {
   title: string;
+  /** Short punchy headline for the phase (used in the pinned stepper). */
+  headline?: string;
   description: string;
 }
 export interface MethodologyContent {

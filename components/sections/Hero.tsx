@@ -7,6 +7,7 @@ import {
   useTransform,
   useReducedMotion,
   useMotionValueEvent,
+  type Variants,
 } from "framer-motion";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
@@ -22,16 +23,67 @@ const summaryIcons = [
   { src: "/images/automation.png", alt: "Intelligent automation" },
 ];
 
+// Headline lines (accent flag colours the final line green).
+const headlineLines: { words: string[]; accent?: boolean }[] = [
+  { words: ["AI", "Solutions"] },
+  { words: ["Delivered", "for"] },
+  { words: ["Speed,", "Scale", "&", "ROI."], accent: true },
+];
+
+// Container staggers each word; each word does a quick glitch-flicker as it
+// resolves smoothly into place.
+const headlineContainer: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } },
+};
+const wordGlitch: Variants = {
+  hidden: { opacity: 0, x: -8, filter: "blur(5px)" },
+  show: {
+    opacity: [0, 1, 0.5, 1],
+    x: [-8, 3, -1, 0],
+    filter: ["blur(5px)", "blur(0px)", "blur(1.5px)", "blur(0px)"],
+    transition: { duration: 0.5, ease: "easeOut", times: [0, 0.55, 0.78, 1] },
+  },
+};
+
 // Header margin height (4rem = 64px) to ensure no scroll overlap.
 function Headline() {
+  const reduce = useReducedMotion();
+  const cls =
+    "text-balance text-[clamp(2.2rem,4.5vw,3.8rem)] font-semibold leading-[1.1] tracking-tight text-foreground text-left";
+
+  if (reduce) {
+    return (
+      <h1 className={cls}>
+        AI Solutions
+        <br />
+        Delivered for
+        <br />
+        <span className="text-accent">Speed, Scale &amp; ROI.</span>
+      </h1>
+    );
+  }
+
   return (
-    <h1 className="text-balance text-[clamp(2.2rem,4.5vw,3.8rem)] font-semibold leading-[1.1] tracking-tight text-foreground animate-fade-in text-left">
-      AI Solutions
-      <br />
-      Delivered for
-      <br />
-      <span className="text-accent">Speed, Scale & ROI.</span>
-    </h1>
+    <motion.h1 variants={headlineContainer} initial="hidden" animate="show" className={cls}>
+      {headlineLines.map((line, li) => (
+        <span key={li} className="block">
+          {line.words.map((w, wi) => (
+            <motion.span
+              key={wi}
+              variants={wordGlitch}
+              className={cn(
+                "inline-block will-change-[transform,opacity,filter]",
+                line.accent && "text-accent",
+              )}
+            >
+              {w}
+              {wi < line.words.length - 1 ? " " : ""}
+            </motion.span>
+          ))}
+        </span>
+      ))}
+    </motion.h1>
   );
 }
 
@@ -87,6 +139,7 @@ export function Hero() {
 
 /* ── Static layout (mobile / reduced-motion / SSR) ───────────────────────── */
 function HeroStatic() {
+  const reduce = useReducedMotion();
   return (
     <section id="top" className="pt-16 bg-background">
       <div className="grid grid-cols-1 border-b border-border lg:h-[calc(100svh-4rem)] lg:grid-cols-12 lg:grid-rows-2">
@@ -98,6 +151,11 @@ function HeroStatic() {
 
         {/* Block 2: Summary */}
         <div className="flex flex-col justify-end overflow-hidden border-b border-border bg-surface-raised p-8 sm:p-12 lg:col-span-4 lg:col-start-9 lg:row-start-1 lg:p-10 min-h-[280px]">
+          <motion.div
+            initial={reduce ? false : { opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          >
           {/* 3 Feature icons (circular badges) stacked on top */}
           <div className="flex gap-3 mb-4 justify-start">
             {summaryIcons.map((ic) => (
@@ -110,6 +168,7 @@ function HeroStatic() {
             ))}
           </div>
           <p className="text-pretty text-xl sm:text-2xl lg:text-3xl font-semibold leading-[1.25] tracking-tight text-foreground text-left whitespace-pre-line">{hero.summary}</p>
+          </motion.div>
         </div>
 
         {/* Block 3: Visual (Brain + Hexagons) */}
@@ -126,14 +185,19 @@ function HeroStatic() {
             <ChevronDown className="size-4" />
           </div>
           
-          {/* CTA Content */}
-          <div className="flex flex-col gap-4 w-full max-w-sm mt-auto">
+          {/* CTA Content — slides UP (bottom → top) on first render */}
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+            className="flex flex-col gap-4 w-full max-w-sm mt-auto"
+          >
             <p className="font-mono text-[10px] uppercase tracking-widest text-accent font-bold">Get started</p>
             <p className="text-pretty text-foreground text-xs lg:text-sm font-medium leading-relaxed">{hero.actionNote}</p>
             <div className="w-full mt-1">
               <Actions stacked={true} />
             </div>
-          </div>
+          </motion.div>
         </div>
 
       </div>
@@ -250,14 +314,19 @@ function HeroAnimated() {
               <ChevronDown className="size-4" />
             </div>
 
-            {/* CTA Content */}
-            <div className="flex flex-col gap-4 w-full max-w-sm mt-auto">
+            {/* CTA Content — slides UP (bottom → top) on first render */}
+            <motion.div
+              initial={{ opacity: 0, y: 44 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+              className="flex flex-col gap-4 w-full max-w-sm mt-auto"
+            >
               <p className="font-mono text-[10px] uppercase tracking-widest text-accent font-bold">Get started</p>
               <p className="text-pretty text-foreground text-xs lg:text-sm font-medium leading-relaxed">{hero.actionNote}</p>
               <div className="w-full mt-1">
                 <Actions stacked={true} />
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </motion.div>
 
@@ -274,11 +343,18 @@ function HeroAnimated() {
               style={{ maxWidth: textMaxWidth }}
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-8 flex flex-col items-center"
             >
-              {/* Feature icons (circular badges) — scroll in once, then stay bright */}
+              {/* Text + icons slide in from the RIGHT on first render */}
               <motion.div
-                style={{ opacity: iconsOpacity, scale: iconsScale, y: iconsTranslateY }}
-                className="flex gap-4 mb-6 justify-center origin-bottom"
+                initial={{ opacity: 0, x: 70 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                className="flex w-full flex-col items-center"
               >
+                {/* Feature icons (circular badges) — scroll in once, then stay bright */}
+                <motion.div
+                  style={{ opacity: iconsOpacity, scale: iconsScale, y: iconsTranslateY }}
+                  className="flex gap-4 mb-6 justify-center origin-bottom"
+                >
                 {summaryIcons.map((ic) => (
                   <div
                     key={ic.src}
@@ -295,12 +371,13 @@ function HeroAnimated() {
                 ))}
               </motion.div>
 
-              <motion.p
-                style={{ fontSize: textFontSize }}
-                className="text-foreground text-pretty w-full text-center leading-[1.25] tracking-tight whitespace-pre-line font-semibold"
-              >
-                {hero.summary}
-              </motion.p>
+                <motion.p
+                  style={{ fontSize: textFontSize }}
+                  className="text-foreground text-pretty w-full text-center leading-[1.25] tracking-tight whitespace-pre-line font-semibold"
+                >
+                  {hero.summary}
+                </motion.p>
+              </motion.div>
             </motion.div>
           </div>
         </motion.div>

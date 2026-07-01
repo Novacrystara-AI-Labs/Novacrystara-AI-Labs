@@ -31,75 +31,70 @@ export function Navbar() {
           scrolled ? "bg-black/85" : "bg-black/70",
         )}
       >
-        {/* Left: logo + nav */}
-        <div className="flex items-center gap-6 pl-4 sm:pl-6">
-          <Link href="#top" aria-label={site.brand} className="flex items-center gap-2.5">
+        {/* Left: logo cell */}
+        <Link href="#top" aria-label={site.brand} className="flex items-center gap-2.5 px-4 sm:px-6">
+          <Image
+            src="/images/logo-icon.png"
+            alt=""
+            width={235}
+            height={225}
+            priority
+            className="h-9 w-auto"
+          />
+          <span
+            aria-hidden={scrolled}
+            className={cn(
+              "hidden overflow-hidden whitespace-nowrap align-middle transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:inline-block",
+              scrolled ? "max-w-0 -translate-x-2 opacity-0" : "max-w-[170px] translate-x-0 opacity-100",
+            )}
+          >
             <Image
-              src="/images/logo-icon.png"
-              alt=""
-              width={235}
-              height={225}
+              src="/images/novacrystara_logo_1_2.png"
+              alt={site.brand}
+              width={744}
+              height={172}
               priority
-              className="h-9 w-auto"
+              className="h-7 w-auto"
             />
-            <span
-              aria-hidden={scrolled}
-              className={cn(
-                "hidden overflow-hidden whitespace-nowrap align-middle transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:inline-block",
-                scrolled ? "max-w-0 -translate-x-2 opacity-0" : "max-w-[170px] translate-x-0 opacity-100",
-              )}
+          </span>
+        </Link>
+
+        {/* Primary nav — full-height cells divided by vertical lines, green fill on hover */}
+        <nav className="hidden items-stretch lg:flex" aria-label="Primary">
+          {site.nav.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="flex items-center border-l border-white/10 px-5 text-sm font-medium text-white/80 transition-colors duration-200 hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
             >
-              <Image
-                src="/images/logo-wordmark.png"
-                alt={site.brand}
-                width={805}
-                height={225}
-                priority
-                className="h-7 w-auto"
-              />
-            </span>
-          </Link>
+              {link.label}
+            </Link>
+          ))}
+        </nav>
 
-          <nav className="hidden lg:block" aria-label="Primary">
-            <ul className="flex items-center gap-6">
-              {site.nav.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="rounded text-sm font-medium text-white/75 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-
-        {/* Right: divider + Explore + edge-flush CTA */}
+        {/* Right: Explore + edge-flush CTA, split by vertical lines */}
         <div className="ml-auto hidden items-stretch lg:flex">
-          <div className="my-3 w-px bg-white/15" />
           <Link
             href="#solutions"
-            className="flex items-center gap-1.5 px-6 text-sm font-medium text-white/85 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+            className="flex items-center gap-1.5 border-l border-white/10 px-6 text-sm font-medium text-white/80 transition-colors duration-200 hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
           >
             Explore
             <ChevronDown className="size-4" aria-hidden />
           </Link>
           <Link
             href={site.primaryCta.href}
-            className="flex items-center gap-2 bg-accent px-6 text-sm font-medium text-white transition-colors hover:bg-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white"
+            className="flex items-center gap-2 border-l border-white/10 bg-accent px-6 text-sm font-semibold text-white transition-colors duration-200 hover:bg-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white"
           >
             Book a Discovery
             <ChevronRight className="size-4" aria-hidden />
           </Link>
         </div>
 
-        {/* Mobile: compact CTA + menu */}
-        <div className="ml-auto flex items-center gap-2 pr-3 lg:hidden">
+        {/* Mobile: compact CTA + menu (sharp edges) */}
+        <div className="ml-auto flex items-stretch lg:hidden">
           <Link
             href={site.primaryCta.href}
-            className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-white"
+            className="flex items-center border-l border-white/10 bg-accent px-4 text-sm font-semibold text-white"
           >
             Book
           </Link>
@@ -108,7 +103,7 @@ export function Navbar() {
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((o) => !o)}
-            className="rounded-full border border-white/15 p-2 text-white"
+            className="flex items-center border-l border-white/10 px-4 text-white transition-colors hover:bg-accent"
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -118,13 +113,13 @@ export function Navbar() {
       {/* Mobile panel */}
       {open ? (
         <div className="fixed inset-x-0 top-16 z-40 border-b border-white/10 bg-black/95 p-4 text-white backdrop-blur-xl lg:hidden">
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col">
             {site.nav.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="block rounded-lg px-2 py-3 text-base text-white/85 hover:bg-white/10 hover:text-white"
+                  className="block border-b border-white/5 px-2 py-3 text-base text-white/85 transition-colors hover:bg-accent hover:text-white"
                 >
                   {link.label}
                 </Link>
@@ -135,14 +130,14 @@ export function Navbar() {
             <Link
               href="#solutions"
               onClick={() => setOpen(false)}
-              className="rounded-full border border-white/15 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-white/10"
+              className="border border-white/15 px-5 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-accent hover:text-white"
             >
               Explore
             </Link>
             <Link
               href={site.primaryCta.href}
               onClick={() => setOpen(false)}
-              className="rounded-full bg-accent px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-accent-strong"
+              className="bg-accent px-5 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-accent-strong"
             >
               Book a Discovery
             </Link>

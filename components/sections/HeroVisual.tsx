@@ -63,14 +63,16 @@ export function HeroVisual() {
         <div className="pointer-events-none absolute inset-0 z-[1] [background:radial-gradient(circle_at_center,transparent_52%,rgba(0,0,0,0.94)_97%)]" />
       </div>
 
-      {/* DESKTOP (lg+): tiles overlaid left/right over the full-block globe */}
+      {/* DESKTOP (lg+): tiles overlaid left/right over the full-block globe.
+          Shifted slightly up + tighter gap so the bottom-row descriptions stay
+          fully visible inside the block. */}
       <div className="pointer-events-none absolute inset-0 z-10 hidden items-center px-6 lg:flex">
-        <div className="mx-auto flex w-full max-w-5xl items-center justify-between">
-          <div className="flex flex-col items-center gap-14">
+        <div className="mx-auto flex w-full max-w-5xl -translate-y-4 items-center justify-between">
+          <div className="flex flex-col items-center gap-9">
             <HexItem {...tiles[0]} />
             <HexItem {...tiles[1]} />
           </div>
-          <div className="flex flex-col items-center gap-14">
+          <div className="flex flex-col items-center gap-9">
             <HexItem {...tiles[2]} />
             <HexItem {...tiles[3]} />
           </div>
