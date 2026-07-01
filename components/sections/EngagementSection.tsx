@@ -16,7 +16,7 @@ export function EngagementSection() {
         <p className="mt-4 text-pretty text-lg text-muted">{engagement.intro}</p>
       </Reveal>
 
-      <div className="mt-14 grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {engagement.models.map((m, i) => (
           <div key={m.title} className="relative">
             <Reveal className="h-full" delay={i * 0.06}>

@@ -31,7 +31,7 @@ export function MethodologySection() {
   return (
     <section id="approach" className="scroll-mt-24">
       {/* Intro */}
-      <Container className="py-24 md:pt-32 md:pb-16">
+      <Container className="py-14 md:pt-16 md:pb-8">
         <Reveal className="max-w-3xl">
           <Eyebrow label="Our Approach" index={6} />
           <h2 className="mt-5 text-balance text-h2 font-semibold">{methodology.heading}</h2>
@@ -178,7 +178,7 @@ function PinnedStepper() {
 
 function StaticStack({ className }: { className?: string }) {
   return (
-    <Container className={cn("pb-24 md:pb-32", className)}>
+    <Container className={cn("pb-16 md:pb-20", className)}>
       <ol className="relative border-l border-border pl-8">
         {phases.map((phase, i) => (
           <StaticRow key={phase.title} phase={phase} index={i} last={i === phases.length - 1} />

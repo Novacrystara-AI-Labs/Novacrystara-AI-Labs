@@ -9,7 +9,7 @@ import { site } from "@/content/site";
 import { cn } from "@/lib/utils";
 
 const fieldBase =
-  "w-full rounded-xl border border-border bg-background px-4 py-3 text-foreground placeholder:text-muted/70 transition-colors focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
+  "w-full rounded-none border border-border bg-background px-4 py-3 text-foreground placeholder:text-muted/70 transition-colors focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 
 /** Discovery-session capture form (arch §2). RHF + Zod; posts to /api/contact. */
 export function ContactForm() {
@@ -42,7 +42,7 @@ export function ContactForm() {
 
   if (submitted) {
     return (
-      <div className="flex flex-col items-center gap-4 rounded-2xl border border-border bg-surface p-10 text-center">
+      <div className="flex flex-col items-center gap-4 rounded-none border border-border bg-surface p-10 text-center">
         <CheckCircle2 aria-hidden className="size-12 text-accent" />
         <h3 className="text-h3 font-semibold">Thanks — we&apos;ll be in touch.</h3>
         <p className="max-w-md text-pretty text-muted">
@@ -57,7 +57,7 @@ export function ContactForm() {
     <form
       onSubmit={handleSubmit(onSubmit)}
       noValidate
-      className="rounded-2xl border border-border bg-surface p-6 sm:p-8"
+      className="rounded-none border border-border bg-surface p-6 sm:p-8"
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Name" error={errors.name?.message} htmlFor="name">
@@ -118,7 +118,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 font-medium text-snow transition-colors hover:bg-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-60 sm:w-auto"
+        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-none bg-accent px-6 py-3 font-medium text-snow transition-colors hover:bg-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-60 sm:w-auto"
       >
         {isSubmitting ? <Loader2 aria-hidden className="size-4 animate-spin" /> : null}
         {isSubmitting ? "Sending…" : "Book a Discovery Session"}

@@ -19,7 +19,7 @@ export function PainPointCard({
   return (
     <div
       className={cn(
-        "group relative flex flex-col overflow-hidden border-b border-r border-dotted border-zinc-300 bg-white p-6 transition-all duration-300 md:p-7",
+        "group relative flex flex-col overflow-hidden border-b border-r border-dashed border-zinc-400 bg-white p-6 transition-all duration-300 md:p-7",
         className,
       )}
     >

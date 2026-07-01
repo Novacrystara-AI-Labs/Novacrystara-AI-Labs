@@ -18,7 +18,7 @@ export function SolutionCard({
   return (
     <SpotlightCard
       className={cn(
-        "group flex h-full flex-col rounded-2xl border border-border bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)]",
+        "group flex h-full flex-col rounded-none border border-border bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)]",
         "transition-all duration-300 ease-nova hover:-translate-y-1.5 hover:border-accent hover:shadow-[0_16px_40px_rgba(78,143,82,0.1)]",
         featured && "sm:p-8",
         className,
@@ -35,7 +35,7 @@ export function SolutionCard({
       <div className="relative flex items-start justify-between gap-3">
         <span
           className={cn(
-            "inline-flex items-center justify-center rounded-xl bg-accent/10 text-accent transition-all duration-300 group-hover:bg-accent group-hover:text-white",
+            "inline-flex items-center justify-center rounded-none bg-accent/10 text-accent transition-all duration-300 group-hover:bg-accent group-hover:text-white",
             featured ? "size-14" : "size-11",
           )}
         >

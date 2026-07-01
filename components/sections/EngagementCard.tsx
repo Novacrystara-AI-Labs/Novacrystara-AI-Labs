@@ -19,13 +19,13 @@ export function EngagementCard({
   return (
     <SpotlightCard
       className={cn(
-        "group flex h-full flex-col rounded-2xl border border-border bg-white p-6 transition-all duration-300 ease-nova",
+        "group flex h-full flex-col rounded-none border border-border bg-white p-6 transition-all duration-300 ease-nova",
         "hover:-translate-y-1.5 hover:border-accent hover:shadow-[0_16px_40px_rgba(78,143,82,0.1)]",
       )}
     >
       <div className="flex items-center justify-between">
         <span className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-accent">
-          <span className="rounded-md bg-accent/10 px-2 py-1 transition-colors duration-300 group-hover:bg-accent group-hover:text-white">
+          <span className="rounded-none bg-accent/10 px-2 py-1 transition-colors duration-300 group-hover:bg-accent group-hover:text-white">
             Step {index + 1}
           </span>
         </span>

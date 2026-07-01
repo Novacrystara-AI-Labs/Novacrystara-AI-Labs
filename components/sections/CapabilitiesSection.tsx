@@ -53,7 +53,7 @@ export function CapabilitiesSection() {
         <p className="mt-4 text-pretty text-lg text-muted">{capabilities.intro}</p>
       </Reveal>
 
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {capabilities.capabilities.map((c, i) => (
           <Reveal key={c.title} className="h-full" delay={i * 0.05}>
             <CapabilityTile capability={c} icon={iconByTitle[c.title] ?? Blocks} index={i} />
@@ -62,7 +62,7 @@ export function CapabilitiesSection() {
       </div>
 
       {/* Tech-stack ticker */}
-      <Reveal className="mt-14">
+      <Reveal className="mt-10">
         <p className="mb-5 text-center font-mono text-xs uppercase tracking-widest text-muted">
           Fluent across the modern AI stack
         </p>
@@ -70,7 +70,7 @@ export function CapabilitiesSection() {
           {stack.map((tech) => (
             <span
               key={tech}
-              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-border bg-white px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+              className="inline-flex items-center gap-2 whitespace-nowrap rounded-none border border-border bg-white px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
             >
               <span aria-hidden className="size-1.5 rounded-full bg-accent" />
               {tech}

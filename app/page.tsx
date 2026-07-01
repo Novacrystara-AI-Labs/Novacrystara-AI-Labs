@@ -1,5 +1,6 @@
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Hero } from "@/components/sections/Hero";
+import { IndustriesSection } from "@/components/sections/IndustriesSection";
 import { ProblemSection } from "@/components/sections/ProblemSection";
 import { DifferentiatorSection } from "@/components/sections/DifferentiatorSection";
 import { SolutionsSection } from "@/components/sections/SolutionsSection";
@@ -18,6 +19,7 @@ export default function Home() {
     <>
       <JsonLd />
       <Hero />
+      <IndustriesSection />
       <ProblemSection />
       <DifferentiatorSection />
       <SolutionsSection />

@@ -17,7 +17,7 @@ export function Section({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className={cn("scroll-mt-24 py-24 md:py-32", className)}>
+    <section id={id} className={cn("scroll-mt-24 py-16 md:py-20", className)}>
       <Container className={containerClassName}>{children}</Container>
     </section>
   );

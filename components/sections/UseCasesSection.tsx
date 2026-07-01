@@ -81,7 +81,7 @@ export function UseCasesSection() {
         <p className="mt-4 text-pretty text-lg text-muted">{useCases.tagline}</p>
       </Reveal>
 
-      <div className="mt-14 grid gap-6 lg:grid-cols-[minmax(0,22rem)_1fr]">
+      <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,22rem)_1fr]">
         {/* Rail / chip scroller */}
         <div
           role="tablist"
@@ -106,7 +106,7 @@ export function UseCasesSection() {
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(i)}
                 className={cn(
-                  "group relative flex shrink-0 items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:w-full",
+                  "group relative flex shrink-0 items-center gap-3 rounded-none border px-4 py-3 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:w-full",
                   selected
                     ? "border-accent/40 bg-white shadow-[0_8px_28px_rgba(78,143,82,0.1)]"
                     : "border-transparent bg-white/40 hover:border-border hover:bg-white",
@@ -122,7 +122,7 @@ export function UseCasesSection() {
                 />
                 <span
                   className={cn(
-                    "inline-flex size-9 shrink-0 items-center justify-center rounded-lg transition-all duration-300",
+                    "inline-flex size-9 shrink-0 items-center justify-center rounded-none transition-all duration-300",
                     selected
                       ? "bg-accent text-white"
                       : "bg-accent/10 text-accent group-hover:bg-accent/20",
@@ -156,7 +156,7 @@ export function UseCasesSection() {
         </div>
 
         {/* Detail panel */}
-        <div className="relative min-h-[26rem] rounded-2xl border border-border bg-white p-6 shadow-[0_8px_40px_rgba(0,0,0,0.03)] sm:p-8">
+        <div className="relative min-h-[26rem] rounded-none border border-border bg-white p-6 shadow-[0_8px_40px_rgba(0,0,0,0.03)] sm:p-8">
           {/* Corner watermark index */}
           <span className="pointer-events-none absolute right-6 top-5 font-mono text-xs tracking-widest text-muted/60">
             {String(active + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
@@ -174,11 +174,11 @@ export function UseCasesSection() {
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className="flex items-start gap-4">
-                <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent/10 text-accent shadow-sm">
+                <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-none bg-accent/10 text-accent shadow-sm">
                   <Icon aria-hidden className="size-7" />
                 </span>
                 <div className="pr-16">
-                  <span className="inline-flex rounded-full bg-accent/10 px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-accent">
+                  <span className="inline-flex rounded-none bg-accent/10 px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-accent">
                     {uc.tagline}
                   </span>
                   <h3 className="mt-2 text-balance text-2xl font-bold tracking-tight text-foreground">
@@ -233,7 +233,7 @@ export function UseCasesSection() {
                       <motion.li
                         key={b}
                         variants={reduce ? undefined : listItem}
-                        className="flex items-center gap-2.5 rounded-lg bg-surface-raised px-3 py-2 text-pretty text-sm font-medium text-foreground"
+                        className="flex items-center gap-2.5 rounded-none bg-surface-raised px-3 py-2 text-pretty text-sm font-medium text-foreground"
                       >
                         <TrendingUp aria-hidden className="size-4 shrink-0 text-accent" />
                         <span>{b}</span>

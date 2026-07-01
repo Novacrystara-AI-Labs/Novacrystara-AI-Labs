@@ -21,7 +21,7 @@ export function FeatureCard({
     <SpotlightCard
       tone="dark"
       className={cn(
-        "group flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-7 transition-colors duration-300 hover:border-[#7ed98d]/40",
+        "group flex h-full flex-col rounded-none border border-white/20 bg-black/40 p-7 backdrop-blur-md transition-colors duration-300 hover:border-[#7ed98d]/60 hover:bg-black/50",
         className,
       )}
     >
@@ -31,17 +31,17 @@ export function FeatureCard({
         className="absolute inset-x-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-[#7ed98d]/70 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
       />
 
-      <div className="flex items-center justify-between">
-        <span className="font-mono text-sm tracking-widest text-[#7ed98d]/80">
+      <div className="flex items-start justify-between">
+        <span className="font-semibold leading-none tracking-tight text-[3.5rem] text-[#7ed98d]/25 transition-colors duration-300 group-hover:text-[#7ed98d]/40 sm:text-[4.5rem]">
           {String(index + 1).padStart(2, "0")}
         </span>
         <ArrowUpRight
           aria-hidden
-          className="size-4 text-white/25 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#7ed98d]"
+          className="mt-2 size-4 shrink-0 text-white/25 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#7ed98d]"
         />
       </div>
 
-      <h3 className="mt-6 text-lg font-semibold tracking-tight text-white transition-colors duration-300 group-hover:text-[#a6e8b1]">
+      <h3 className="mt-4 text-lg font-semibold tracking-tight text-white transition-colors duration-300 group-hover:text-[#a6e8b1]">
         {pillar.title}
       </h3>
       <p className="mt-2.5 text-pretty text-sm leading-relaxed text-white/55">

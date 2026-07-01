@@ -17,7 +17,7 @@ const pillars = [
 export function TrustSection() {
   return (
     <Section id="trust">
-      <Reveal className="relative overflow-hidden rounded-3xl border border-white/10 bg-ink p-8 text-white sm:p-12">
+      <Reveal className="relative overflow-hidden rounded-none border border-white/10 bg-ink p-8 text-white sm:p-12">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="bg-blueprint-dark mask-radial-fade absolute inset-0 opacity-60" />
           <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(78,143,82,0.25),transparent_70%)] blur-2xl" />
@@ -25,7 +25,7 @@ export function TrustSection() {
 
         <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-16">
           <div className="max-w-2xl">
-            <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-[#7ed98d]/15 text-[#7ed98d]">
+            <span className="inline-flex size-12 items-center justify-center rounded-none bg-[#7ed98d]/15 text-[#7ed98d]">
               <ShieldCheck aria-hidden className="size-7" />
             </span>
             <Eyebrow label="Trust & Governance" tone="dark" className="mt-6" />
@@ -38,7 +38,7 @@ export function TrustSection() {
             {pillars.map(({ icon: Icon, label }) => (
               <li
                 key={label}
-                className="group flex flex-col gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4 transition-colors duration-300 hover:border-[#7ed98d]/40"
+                className="group flex flex-col gap-3 rounded-none border border-white/10 bg-white/[0.03] p-4 transition-colors duration-300 hover:border-[#7ed98d]/40"
               >
                 <Icon
                   aria-hidden

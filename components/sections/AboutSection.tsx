@@ -13,7 +13,7 @@ export function AboutSection() {
         {/* Left rail: eyebrow + stat card */}
         <Reveal className="lg:sticky lg:top-28 lg:self-start">
           <Eyebrow label="About Us" index={9} />
-          <div className="mt-6 overflow-hidden rounded-2xl border border-accent/25 bg-ink p-7 text-white">
+          <div className="mt-6 overflow-hidden rounded-none border border-accent/25 bg-ink p-7 text-white">
             <p className="font-mono text-xs uppercase tracking-widest text-[#7ed98d]">
               Combined delivery
             </p>

@@ -17,7 +17,7 @@ export function FAQSection() {
           </p>
         </Reveal>
 
-        <Reveal className="rounded-2xl border border-border bg-white px-6 sm:px-8">
+        <Reveal className="rounded-none border border-border bg-white px-6 sm:px-8">
           {faq.items.map((item) => (
             <Accordion key={item.question} summary={item.question}>
               {item.answer}

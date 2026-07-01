@@ -27,7 +27,7 @@ export function SolutionsSection() {
         <p className="mt-4 text-pretty text-lg text-muted">{solutions.intro}</p>
       </Reveal>
 
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {solutions.solutions.map((s, i) => (
           <Reveal key={s.title} className={`h-full ${spans[i]}`} delay={i * 0.05}>
             <SolutionCard

@@ -25,7 +25,7 @@ export function CapabilityTile({
 }) {
   const slug = slugByTitle[capability.title] ?? "capability";
   return (
-    <SpotlightCard className="group flex h-full flex-col rounded-2xl border border-border bg-white transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_16px_40px_rgba(78,143,82,0.08)]">
+    <SpotlightCard className="group flex h-full flex-col rounded-none border border-border bg-white transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_16px_40px_rgba(78,143,82,0.08)]">
       {/* Terminal titlebar */}
       <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
         <span className="flex gap-1.5" aria-hidden>
@@ -44,7 +44,7 @@ export function CapabilityTile({
 
       {/* Body */}
       <div className="flex flex-1 flex-col p-6">
-        <span className="inline-flex size-11 items-center justify-center rounded-xl bg-accent/10 text-accent transition-all duration-300 group-hover:bg-accent group-hover:text-white">
+        <span className="inline-flex size-11 items-center justify-center rounded-none bg-accent/10 text-accent transition-all duration-300 group-hover:bg-accent group-hover:text-white">
           <Icon aria-hidden className="size-6" />
         </span>
         <h3 className="mt-4 text-h3 font-semibold">{capability.title}</h3>

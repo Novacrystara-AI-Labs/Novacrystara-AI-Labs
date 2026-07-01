@@ -35,7 +35,7 @@ export function ProblemSection() {
       {/* Editorial bento: sharp edges, shared dotted borders (no gaps), varied sizes.
           Order: Pilot · Architecture · Talent · ROI · Vendor · Governance. */}
       <Reveal>
-        <div className="mt-14 grid grid-cols-1 border-l border-t border-dotted border-zinc-300 md:grid-cols-4 md:[grid-template-rows:repeat(4,minmax(7.5rem,auto))]">
+        <div className="mt-10 grid grid-cols-1 border-l border-t border-dashed border-zinc-400 md:grid-cols-4 md:[grid-template-rows:repeat(4,minmax(7.5rem,auto))]">
           {problem.painPoints.map((p, i) => (
             <PainPointCard key={p.title} painPoint={p} index={i} className={cardSpans[i]} />
           ))}
@@ -44,13 +44,13 @@ export function ProblemSection() {
 
       {/* Closing callout — reframes the pain points as a reason to choose a partner. */}
       <Reveal>
-        <div className="group mt-8 flex flex-col items-start gap-5 rounded-2xl border border-accent/25 bg-surface-raised p-7 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+        <div className="group mt-8 flex flex-col items-start gap-5 rounded-none border border-accent/25 bg-surface-raised p-7 sm:flex-row sm:items-center sm:justify-between sm:p-8">
           <p className="max-w-3xl text-pretty text-lg font-medium leading-relaxed text-foreground sm:text-xl">
             {problem.closing}
           </p>
           <a
             href="#why"
-            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-snow transition-all duration-300 hover:gap-3 hover:bg-accent-strong"
+            className="inline-flex shrink-0 items-center gap-2 rounded-none bg-accent px-5 py-2.5 text-sm font-semibold text-snow transition-all duration-300 hover:gap-3 hover:bg-accent-strong"
           >
             See how
             <ArrowRight aria-hidden className="size-4" />
