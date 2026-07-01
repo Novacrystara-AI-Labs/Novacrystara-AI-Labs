@@ -9,6 +9,7 @@ import {
   useReducedMotion,
   type Variants,
 } from "framer-motion";
+import { Compass, Blocks, Hammer, Rocket, RefreshCw, type LucideIcon } from "lucide-react";
 import { methodology } from "@/content/methodology";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -17,6 +18,15 @@ import { cn } from "@/lib/utils";
 import type { Phase } from "@/types";
 
 const phases = methodology.phases;
+
+// Per-phase icon (by title) for the detail panel.
+const phaseIcons: Record<string, LucideIcon> = {
+  Discovery: Compass,
+  Architecture: Blocks,
+  Build: Hammer,
+  Deploy: Rocket,
+  "Continuous Optimization": RefreshCw,
+};
 
 /**
  * SECTION 6 — Methodology / Approach (arch §5 #6).
@@ -76,6 +86,7 @@ function PinnedStepper() {
 
   const phase = phases[active];
   const num = String(active + 1).padStart(2, "0");
+  const PhaseIcon = phaseIcons[phase.title] ?? Compass;
 
   return (
     <div
@@ -154,16 +165,39 @@ function PinnedStepper() {
                   initial="enter"
                   animate="center"
                   exit="exit"
+                  className="relative max-w-xl"
                 >
-                  <p className="font-mono text-sm tracking-wide text-accent">
-                    {num} — {phase.title}
-                  </p>
-                  <h3 className="mt-3 text-balance text-3xl font-bold tracking-tight text-foreground xl:text-4xl">
-                    {phase.headline ?? phase.title}
-                  </h3>
-                  <p className="mt-5 max-w-md text-pretty text-lg leading-relaxed text-muted">
-                    {phase.description}
-                  </p>
+                  {/* Crop-mark frame corners */}
+                  <span
+                    aria-hidden
+                    className="absolute -left-5 -top-5 size-7 border-l-2 border-t-2 border-accent/40"
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute -bottom-5 -right-5 size-7 border-b-2 border-r-2 border-accent/40"
+                  />
+
+                  {/* Ghost icon watermark */}
+                  <PhaseIcon
+                    aria-hidden
+                    className="pointer-events-none absolute -right-2 top-0 size-40 text-accent/[0.06]"
+                  />
+
+                  <div className="relative">
+                    <span className="inline-flex size-12 items-center justify-center border border-accent/30 bg-accent/10 text-accent">
+                      <PhaseIcon aria-hidden className="size-6" />
+                    </span>
+
+                    <h3 className="mt-6 text-balance text-3xl font-bold tracking-tight text-foreground xl:text-4xl">
+                      {phase.headline ?? phase.title}
+                    </h3>
+                    <p className="mt-4 max-w-md text-pretty text-lg leading-relaxed text-muted">
+                      {phase.description}
+                    </p>
+
+                    {/* Decorative accent line */}
+                    <div className="mt-7 h-px w-full max-w-md bg-gradient-to-r from-accent/50 via-accent/20 to-transparent" />
+                  </div>
                 </motion.div>
               </AnimatePresence>
             </div>
