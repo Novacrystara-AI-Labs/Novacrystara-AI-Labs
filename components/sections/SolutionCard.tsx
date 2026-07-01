@@ -35,14 +35,6 @@ export function SolutionCard({
         className="pointer-events-none absolute inset-0 z-0 translate-y-full bg-[#e2f5e5] transition-transform duration-500 ease-nova group-hover:translate-y-0"
       />
 
-      {/* Ghost-icon watermark (featured only) */}
-      {featured ? (
-        <Icon
-          aria-hidden
-          className="pointer-events-none absolute -bottom-6 -right-6 z-[1] size-44 text-accent/[0.06] transition-all duration-500 group-hover:scale-105 group-hover:text-accent/[0.1]"
-        />
-      ) : null}
-
       {/* Big watermark index (top-right) */}
       <span
         className={cn(

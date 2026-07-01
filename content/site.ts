@@ -17,7 +17,7 @@ export const site: SiteContent = {
   ],
   primaryCta: { label: "Book a Discovery Session", href: "#contact" },
   footer: {
-    tagline: "The speed of a startup. The rigor of three decades.",
+    tagline: "Speed, Scale & ROI.",
     links: [
       { label: "Solutions", href: "#solutions" },
       { label: "Use Cases", href: "#use-cases" },
@@ -29,6 +29,6 @@ export const site: SiteContent = {
     legal: `© ${new Date().getFullYear()} NovaCrystara AI Labs. All rights reserved.`,
   },
   contact: {
-    email: "hello@novacrystara.ai",
+    email: "contact@novacrystara.com",
   },
 };

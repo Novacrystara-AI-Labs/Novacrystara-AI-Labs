@@ -8,9 +8,9 @@ import { site } from "@/content/site";
 import { cn } from "@/lib/utils";
 
 /**
- * Full-width dark glass navbar (reference layout):
- * logo (icon + wordmark) + nav on the left, a vertical divider, then "Explore" and an
- * edge-flush "Book a Discovery" button on the right. The wordmark fades off (right→left) on scroll.
+ * Full-width solid-black navbar: icon + wordmark on the left (the wordmark fades
+ * off, right→left, on scroll), primary nav in full-height cells, then "Explore"
+ * and an edge-flush "Book a Discovery" button on the right.
  */
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -25,36 +25,31 @@ export function Navbar() {
 
   return (
     <>
-      <header
-        className={cn(
-          "fixed inset-x-0 top-0 z-50 flex h-16 items-stretch border-b border-white/10 text-white backdrop-blur-xl transition-colors duration-300",
-          scrolled ? "bg-black/85" : "bg-black/70",
-        )}
-      >
-        {/* Left: logo cell */}
+      <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-stretch border-b border-white/10 bg-black text-white">
+        {/* Left: logo cell — emblem + wordmark (wordmark fades off on scroll) */}
         <Link href="#top" aria-label={site.brand} className="flex items-center gap-2.5 px-4 sm:px-6">
           <Image
-            src="/images/logo-icon.png"
+            src="/images/novacrystara_logo_1_1.png"
             alt=""
             width={235}
             height={225}
             priority
-            className="h-9 w-auto"
+            className="h-11 w-auto"
           />
           <span
             aria-hidden={scrolled}
             className={cn(
               "hidden overflow-hidden whitespace-nowrap align-middle transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:inline-block",
-              scrolled ? "max-w-0 -translate-x-2 opacity-0" : "max-w-[170px] translate-x-0 opacity-100",
+              scrolled ? "max-w-0 -translate-x-2 opacity-0" : "max-w-[180px] translate-x-0 opacity-100",
             )}
           >
             <Image
-              src="/images/novacrystara_logo_1_2.png"
+              src="/images/novacrystara_logo_1_4.png"
               alt={site.brand}
-              width={744}
-              height={172}
+              width={747}
+              height={222}
               priority
-              className="h-7 w-auto"
+              className="h-8 w-auto"
             />
           </span>
         </Link>
@@ -112,7 +107,7 @@ export function Navbar() {
 
       {/* Mobile panel */}
       {open ? (
-        <div className="fixed inset-x-0 top-16 z-40 border-b border-white/10 bg-black/95 p-4 text-white backdrop-blur-xl lg:hidden">
+        <div className="fixed inset-x-0 top-16 z-40 border-b border-white/10 bg-black p-4 text-white lg:hidden">
           <ul className="flex flex-col">
             {site.nav.map((link) => (
               <li key={link.href}>
