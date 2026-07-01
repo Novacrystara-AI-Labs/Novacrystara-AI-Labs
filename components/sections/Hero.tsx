@@ -8,11 +8,19 @@ import {
   useReducedMotion,
   useMotionValueEvent,
 } from "framer-motion";
-import { ChevronDown, Briefcase, Bot, Globe } from "lucide-react";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import { hero } from "@/content/hero";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { HeroVisual } from "./HeroVisual";
+
+// Summary-block feature icons (PNG illustrations) shown as circular badges.
+const summaryIcons = [
+  { src: "/images/bag.png", alt: "Enterprise platforms" },
+  { src: "/images/bot.png", alt: "AI agents" },
+  { src: "/images/automation.png", alt: "Intelligent automation" },
+];
 
 // Header margin height (4rem = 64px) to ensure no scroll overlap.
 function Headline() {
@@ -32,8 +40,9 @@ function Actions({ stacked = true }: { stacked?: boolean }) {
   const sharp =
     "rounded-none transition-all duration-200 ease-nova hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0 active:translate-y-0 active:shadow-none";
   const hover = [
-    "hover:shadow-[5px_5px_0_0_var(--accent-strong)]",
-    "hover:shadow-[5px_5px_0_0_var(--accent)] hover:bg-accent/[0.06]",
+    // Primary: button STAYS green; the offset block behind it goes BLACK on hover.
+    "hover:bg-accent hover:shadow-[6px_6px_0_0_#000]",
+    "hover:shadow-[6px_6px_0_0_#000] hover:bg-accent/[0.06]",
   ];
   return (
     <div className={cn("flex gap-3", stacked ? "flex-col w-full" : "flex-wrap justify-center")}>
@@ -89,17 +98,16 @@ function HeroStatic() {
 
         {/* Block 2: Summary */}
         <div className="flex flex-col justify-end overflow-hidden border-b border-border bg-surface-raised p-8 sm:p-12 lg:col-span-4 lg:col-start-9 lg:row-start-1 lg:p-10 min-h-[280px]">
-          {/* 3 Tech Icons stacked on top */}
+          {/* 3 Feature icons (circular badges) stacked on top */}
           <div className="flex gap-3 mb-4 justify-start">
-            <div className="size-8 bg-[#c27629]/15 rounded-lg text-[#c27629] flex items-center justify-center">
-              <Briefcase className="size-4 lg:size-5" />
-            </div>
-            <div className="size-8 bg-[#1b73e8]/15 rounded-lg text-[#1b73e8] flex items-center justify-center">
-              <Bot className="size-4 lg:size-5" />
-            </div>
-            <div className="size-8 bg-[#0f9d58]/15 rounded-lg text-[#0f9d58] flex items-center justify-center">
-              <Globe className="size-4 lg:size-5" />
-            </div>
+            {summaryIcons.map((ic) => (
+              <div
+                key={ic.src}
+                className="flex size-11 items-center justify-center rounded-full bg-white shadow-[0_4px_14px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.05]"
+              >
+                <Image src={ic.src} alt={ic.alt} width={32} height={32} className="size-8 object-contain [filter:saturate(1.15)]" />
+              </div>
+            ))}
           </div>
           <p className="text-pretty text-xl sm:text-2xl lg:text-3xl font-semibold leading-[1.25] tracking-tight text-foreground text-left whitespace-pre-line">{hero.summary}</p>
         </div>
@@ -178,10 +186,13 @@ function HeroAnimated() {
   // headline size as the block expands (matches the reference behaviour).
   const textFontSize = useTransform(scrollYProgress, [0, 0.70], [20, 40]);
 
-  // Tech icons fade and scale in continuously above the text as scroll progresses.
-  const iconsOpacity = useTransform(scrollYProgress, [0.12, 0.45], [0, 1]);
-  const iconsScale = useTransform(scrollYProgress, [0.12, 0.70], [0.65, 1]);
-  const iconsTranslateY = useTransform(scrollYProgress, [0.12, 0.45], [16, 0]);
+  // Feature icons fade + scale in as you scroll, then stay fully bright. The
+  // ranges complete early (by ~0.3) and framer clamps the output, so once the
+  // icons are in they DON'T fade back out as you continue toward the centered
+  // resting state.
+  const iconsOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
+  const iconsScale = useTransform(scrollYProgress, [0.1, 0.45], [0.8, 1]);
+  const iconsTranslateY = useTransform(scrollYProgress, [0.1, 0.3], [16, 0]);
 
   const [isBorderVisible, setIsBorderVisible] = useState(true);
 
@@ -263,20 +274,25 @@ function HeroAnimated() {
               style={{ maxWidth: textMaxWidth }}
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-8 flex flex-col items-center"
             >
-              {/* Tech icons fade + scale in above the text */}
+              {/* Feature icons (circular badges) — scroll in once, then stay bright */}
               <motion.div
                 style={{ opacity: iconsOpacity, scale: iconsScale, y: iconsTranslateY }}
                 className="flex gap-4 mb-6 justify-center origin-bottom"
               >
-                <div className="size-12 md:size-14 rounded-2xl bg-[#c27629]/15 text-[#c27629] flex items-center justify-center shadow-sm">
-                  <Briefcase className="size-5 md:size-7" />
-                </div>
-                <div className="size-12 md:size-14 rounded-2xl bg-[#1b73e8]/15 text-[#1b73e8] flex items-center justify-center shadow-sm">
-                  <Bot className="size-5 md:size-7" />
-                </div>
-                <div className="size-12 md:size-14 rounded-2xl bg-[#0f9d58]/15 text-[#0f9d58] flex items-center justify-center shadow-sm">
-                  <Globe className="size-5 md:size-7" />
-                </div>
+                {summaryIcons.map((ic) => (
+                  <div
+                    key={ic.src}
+                    className="flex size-14 items-center justify-center rounded-full bg-white shadow-[0_6px_20px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.05] md:size-16"
+                  >
+                    <Image
+                      src={ic.src}
+                      alt={ic.alt}
+                      width={52}
+                      height={52}
+                      className="size-10 object-contain md:size-12 [filter:saturate(1.15)]"
+                    />
+                  </div>
+                ))}
               </motion.div>
 
               <motion.p

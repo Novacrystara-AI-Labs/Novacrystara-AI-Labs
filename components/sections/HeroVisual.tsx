@@ -11,9 +11,16 @@ interface HexItemProps {
   desc: string;
 }
 
+const tiles: HexItemProps[] = [
+  { icon: Layers, title: "Enterprise AI Platforms", desc: "Scalable platforms built for real-world impact." },
+  { icon: Bot, title: "AI Agents", desc: "Intelligent agents that think, act and deliver." },
+  { icon: Puzzle, title: "AI Integration", desc: "Seamless integration with your existing systems." },
+  { icon: Cloud, title: "AI Modernization", desc: "Modernize legacy systems and accelerate growth." },
+];
+
 function HexItem({ icon: Icon, title, desc }: HexItemProps) {
   return (
-    <div className="group pointer-events-auto relative flex w-[140px] flex-col items-center px-1.5 py-1 text-center transition-transform duration-300 hover:-translate-y-1 lg:w-[165px]">
+    <div className="group pointer-events-auto relative flex w-[150px] flex-col items-center px-1.5 py-1 text-center transition-transform duration-300 hover:-translate-y-1 lg:w-[165px]">
       {/* Soft glow halo behind the hexagon */}
       <div className="pointer-events-none absolute left-1/2 top-0 size-12 -translate-x-1/2 rounded-full bg-[#4e8f52]/25 opacity-60 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
 
@@ -22,10 +29,7 @@ function HexItem({ icon: Icon, title, desc }: HexItemProps) {
         className="relative mb-2 size-11 bg-[#4e8f52]/70 p-[2px] shadow-[0_0_12px_rgba(78,143,82,0.35)] transition-all duration-300 group-hover:scale-110 group-hover:bg-[#63d877] group-hover:shadow-[0_0_22px_rgba(99,216,119,0.75)] lg:size-[52px]"
         style={{ clipPath: HEX }}
       >
-        <div
-          className="flex size-full items-center justify-center bg-black"
-          style={{ clipPath: HEX }}
-        >
+        <div className="flex size-full items-center justify-center bg-black" style={{ clipPath: HEX }}>
           <Icon className="size-4 text-[#80e296] transition-colors duration-300 group-hover:text-white lg:size-5" />
         </div>
       </div>
@@ -48,43 +52,36 @@ function HexItem({ icon: Icon, title, desc }: HexItemProps) {
 
 export function HeroVisual() {
   return (
-    <div className="relative flex h-full min-h-[440px] w-full select-none items-center justify-center overflow-hidden bg-black px-6 py-5 lg:min-h-full">
-      {/* Ambient green core glow */}
-      <div className="pointer-events-none absolute inset-0 [background:radial-gradient(circle_at_center,rgba(78,143,82,0.1),transparent_62%)]" />
+    <div className="relative flex h-full min-h-[440px] w-full select-none flex-col overflow-hidden bg-black lg:block">
+      {/* Globe area — a top strip on mobile/tablet, the full background on desktop */}
+      <div className="relative h-[240px] w-full shrink-0 sm:h-[300px] lg:absolute lg:inset-0 lg:h-auto">
+        {/* Ambient green core glow */}
+        <div className="pointer-events-none absolute inset-0 [background:radial-gradient(circle_at_center,rgba(78,143,82,0.12),transparent_62%)]" />
+        {/* Live neural network + rotating code globe */}
+        <CodeGlobe className="absolute inset-0 z-0 cursor-crosshair" />
+        {/* Edge vignette */}
+        <div className="pointer-events-none absolute inset-0 z-[1] [background:radial-gradient(circle_at_center,transparent_52%,rgba(0,0,0,0.94)_97%)]" />
+      </div>
 
-      {/* Full-block canvas: live neural network + rotating code globe */}
-      <CodeGlobe className="absolute inset-0 z-0 cursor-crosshair" />
-
-      {/* Edge vignette so characters dissolve into the (slightly darker) block */}
-      <div className="pointer-events-none absolute inset-0 z-[1] [background:radial-gradient(circle_at_center,transparent_52%,rgba(0,0,0,0.94)_97%)]" />
-
-      {/* Feature tiles overlay (interactions pass through to the canvas between tiles) */}
-      <div className="pointer-events-none relative z-10 flex h-full w-full max-w-5xl flex-col items-center justify-center gap-6 lg:flex-row lg:justify-between lg:gap-4">
-        <div className="flex flex-row items-center justify-center gap-6 lg:flex-col lg:gap-6">
-          <HexItem
-            icon={Layers}
-            title="Enterprise AI Platforms"
-            desc="Scalable platforms built for real-world impact."
-          />
-          <HexItem
-            icon={Bot}
-            title="AI Agents"
-            desc="Intelligent agents that think, act and deliver."
-          />
+      {/* DESKTOP (lg+): tiles overlaid left/right over the full-block globe */}
+      <div className="pointer-events-none absolute inset-0 z-10 hidden items-center px-6 lg:flex">
+        <div className="mx-auto flex w-full max-w-5xl items-center justify-between">
+          <div className="flex flex-col items-center gap-14">
+            <HexItem {...tiles[0]} />
+            <HexItem {...tiles[1]} />
+          </div>
+          <div className="flex flex-col items-center gap-14">
+            <HexItem {...tiles[2]} />
+            <HexItem {...tiles[3]} />
+          </div>
         </div>
+      </div>
 
-        <div className="flex flex-row items-center justify-center gap-6 lg:flex-col lg:gap-6">
-          <HexItem
-            icon={Puzzle}
-            title="AI Integration"
-            desc="Seamless integration with your existing systems."
-          />
-          <HexItem
-            icon={Cloud}
-            title="AI Modernization"
-            desc="Modernize legacy systems and accelerate growth."
-          />
-        </div>
+      {/* MOBILE / TABLET (< lg): a clean 2×2 grid below the globe, no overlap */}
+      <div className="relative z-10 grid grid-cols-2 place-items-center gap-x-4 gap-y-9 border-t border-white/5 px-4 py-9 lg:hidden">
+        {tiles.map((t) => (
+          <HexItem key={t.title} {...t} />
+        ))}
       </div>
     </div>
   );
