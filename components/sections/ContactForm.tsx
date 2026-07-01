@@ -11,8 +11,9 @@ import { cn } from "@/lib/utils";
 const fieldBase =
   "w-full rounded-none border border-border bg-background px-4 py-3 text-foreground placeholder:text-muted/70 transition-colors focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 
-/** Discovery-session capture form (arch §2). RHF + Zod; posts to /api/contact. */
-export function ContactForm() {
+/** Discovery-session capture form (arch §2). RHF + Zod; posts to /api/contact.
+ *  `bare` drops the outer card frame (used inside the CTA modal). */
+export function ContactForm({ bare = false }: { bare?: boolean }) {
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -42,7 +43,12 @@ export function ContactForm() {
 
   if (submitted) {
     return (
-      <div className="flex flex-col items-center gap-4 rounded-none border border-border bg-surface p-10 text-center">
+      <div
+        className={cn(
+          "flex flex-col items-center gap-4 text-center",
+          !bare && "rounded-none border border-border bg-surface p-10",
+        )}
+      >
         <CheckCircle2 aria-hidden className="size-12 text-accent" />
         <h3 className="text-h3 font-semibold">Thanks — we&apos;ll be in touch.</h3>
         <p className="max-w-md text-pretty text-muted">
@@ -57,7 +63,7 @@ export function ContactForm() {
     <form
       onSubmit={handleSubmit(onSubmit)}
       noValidate
-      className="rounded-none border border-border bg-surface p-6 sm:p-8"
+      className={cn(!bare && "rounded-none border border-border bg-surface p-6 sm:p-8")}
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Name" error={errors.name?.message} htmlFor="name">

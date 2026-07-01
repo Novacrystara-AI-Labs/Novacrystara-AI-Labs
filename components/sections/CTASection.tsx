@@ -1,11 +1,7 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { cta } from "@/content/cta";
 import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
 import { ScrollGrowPanel } from "@/components/ui/ScrollGrowPanel";
-import { cn } from "@/lib/utils";
-import { ContactForm } from "./ContactForm";
+import { ContactDialog } from "./ContactDialog";
 
 /** SECTION 9 — Final CTA / Contact (arch §5 #9). Dark aurora banner + capture form. */
 export function CTASection() {
@@ -37,36 +33,13 @@ export function CTASection() {
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-pretty text-lg text-white/90">{cta.body}</p>
 
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-              {cta.ctas.map((c, i) => (
-                <Link
-                  key={c.label}
-                  href={c.href}
-                  className={cn(
-                    "group inline-flex items-center justify-center gap-2 rounded-none px-6 py-3 text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7ed98d] focus-visible:ring-offset-2 focus-visible:ring-offset-ink",
-                    i === 0
-                      ? "bg-accent text-white hover:bg-[#5fa863] hover:shadow-[0_10px_30px_rgba(78,143,82,0.4)]"
-                      : "border border-white/20 text-white hover:border-[#7ed98d] hover:text-[#7ed98d]",
-                  )}
-                >
-                  {c.label}
-                  <ArrowRight
-                    aria-hidden
-                    className="size-4 transition-transform duration-300 group-hover:translate-x-0.5"
-                  />
-                </Link>
-              ))}
-            </div>
+            <ContactDialog ctas={cta.ctas} />
 
             <p className="mx-auto mt-6 max-w-xl text-pretty text-sm text-white/80">
               {cta.reassurance}
             </p>
           </div>
         </ScrollGrowPanel>
-
-        <Reveal className="mx-auto mt-10 max-w-2xl">
-          <ContactForm />
-        </Reveal>
       </Container>
     </section>
   );

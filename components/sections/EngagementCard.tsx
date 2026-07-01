@@ -1,11 +1,10 @@
-import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { cn } from "@/lib/utils";
 import type { EngagementModel } from "@/types";
 
 /**
  * A single engagement model on the "scaling ladder" (arch §5 #8).
  * A 4-segment scale meter fills up to this step, visually implying escalating
- * scope from Assessment → Full-Scale. Later steps sit taller (stair-step).
+ * scope from Assessment → Full-Scale. (No cursor spotlight — plain hover lift.)
  */
 export function EngagementCard({
   model,
@@ -17,7 +16,7 @@ export function EngagementCard({
   total: number;
 }) {
   return (
-    <SpotlightCard
+    <div
       className={cn(
         "group flex h-full flex-col rounded-none border border-border bg-white p-6 transition-all duration-300 ease-nova",
         "hover:-translate-y-1.5 hover:border-accent hover:shadow-[0_16px_40px_rgba(78,143,82,0.1)]",
@@ -54,6 +53,6 @@ export function EngagementCard({
           />
         ))}
       </div>
-    </SpotlightCard>
+    </div>
   );
 }
