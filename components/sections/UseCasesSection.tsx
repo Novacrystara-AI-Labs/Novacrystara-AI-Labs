@@ -27,10 +27,15 @@ import { Reveal } from "@/components/ui/Reveal";
 import { CodeParticles } from "@/components/ui/CodeParticles";
 import { cn } from "@/lib/utils";
 
-// Per-use-case hero artwork (right panel). Tabs without one fall back to the
-// generated visual. Add more as artwork is provided.
+// Per-use-case hero artwork (right panel), matched by use-case id.
 const useCaseImages: Record<string, string> = {
   "autonomous-maintenance-agent": "/images/use_cases/Autonomous_agent_1.png",
+  "autonomous-facility-maintenance-agent": "/images/use_cases/Autonomous_facility_agent.png",
+  "ai-security-operations-center": "/images/use_cases/Autonomous_security.png",
+  "autonomous-colocation-b2b-sales-agent": "/images/use_cases/Autonomous_sales.png",
+  "virtual-healthcare-assistant": "/images/use_cases/Virtual_Healthcare_Assistant.png",
+  "autonomous-hiring-agent": "/images/use_cases/Autonomous_hiring_agent.png",
+  "autonomous-sales-qualification-agent": "/images/use_cases/Autonomous_sales_qualification.png",
 };
 
 const icons: Record<string, LucideIcon> = {
@@ -254,20 +259,13 @@ export function UseCasesSection() {
               )}
             >
               {image ? (
-                <>
-                  <Image
-                    src={image}
-                    alt={uc.title}
-                    fill
-                    sizes="(min-width: 1024px) 45vw, 100vw"
-                    className="object-cover object-center"
-                  />
-                  {/* White fade — blends the top edge on mobile and the left edge on desktop */}
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-transparent to-transparent lg:bg-gradient-to-r lg:via-background/20"
-                  />
-                </>
+                <Image
+                  src={image}
+                  alt={uc.title}
+                  fill
+                  sizes="(min-width: 1024px) 45vw, 100vw"
+                  className="object-cover object-center"
+                />
               ) : (
                 <>
                   {/* Ambient */}
