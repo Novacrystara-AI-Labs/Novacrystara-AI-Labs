@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Plus } from "lucide-react";
+import { Plus, ArrowRight } from "lucide-react";
 import { faq } from "@/content/faq";
+import { site } from "@/content/site";
 import { Section } from "@/components/ui/Section";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
@@ -12,7 +13,7 @@ import { cn } from "@/lib/utils";
 /**
  * OPTIONAL — FAQ (arch §5 O3).
  * Single-open accordion: opening one item closes the others; the answer height
- * animates in/out. Two-column editorial layout.
+ * animates in/out. Two-column editorial layout with a sticky intro + contact card.
  */
 export function FAQSection() {
   const [open, setOpen] = useState<number | null>(0);
@@ -27,6 +28,21 @@ export function FAQSection() {
           <p className="mt-4 text-pretty text-muted">
             Straight answers on how we work, integrate, and de-risk enterprise AI.
           </p>
+
+          {/* Still-have-questions contact card */}
+          <div className="mt-8 border border-border bg-surface-raised/60 p-6">
+            <p className="text-base font-semibold text-foreground">Still have questions?</p>
+            <p className="mt-2 text-sm leading-relaxed text-foreground/70">
+              Talk to the team that&apos;s shipped enterprise systems for three decades.
+            </p>
+            <a
+              href={`mailto:${site.contact.email}`}
+              className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent transition-colors hover:text-accent-strong"
+            >
+              {site.contact.email}
+              <ArrowRight aria-hidden className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
+          </div>
         </Reveal>
 
         <Reveal className="border border-border bg-white">
@@ -40,11 +56,21 @@ export function FAQSection() {
                     aria-expanded={isOpen}
                     onClick={() => setOpen(isOpen ? null : i)}
                     className={cn(
-                      "group flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:px-8",
+                      "group flex w-full items-center gap-4 px-6 py-5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:px-8",
                       isOpen ? "text-accent" : "text-foreground hover:text-accent",
                     )}
                   >
-                    <span className="text-lg font-semibold tracking-tight">{item.question}</span>
+                    <span
+                      className={cn(
+                        "font-mono text-sm tabular-nums transition-colors",
+                        isOpen ? "text-accent" : "text-foreground/35 group-hover:text-accent",
+                      )}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="flex-1 text-lg font-semibold tracking-tight">
+                      {item.question}
+                    </span>
                     <span
                       className={cn(
                         "flex size-8 shrink-0 items-center justify-center border transition-all duration-300",
@@ -68,7 +94,7 @@ export function FAQSection() {
                       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="px-6 pb-6 pr-10 text-pretty leading-relaxed text-muted sm:px-8">
+                      <p className="pb-6 pl-[3.75rem] pr-10 text-pretty leading-relaxed text-muted sm:pl-[4.75rem]">
                         {item.answer}
                       </p>
                     </motion.div>

@@ -38,7 +38,7 @@ export function SolutionCard({
       {/* Big watermark index (top-right) */}
       <span
         className={cn(
-          "pointer-events-none absolute right-4 top-2 z-[1] font-semibold leading-none tracking-tight text-zinc-300 transition-colors duration-300 group-hover:text-accent/50",
+          "pointer-events-none absolute right-4 top-2 z-[1] font-semibold leading-none tracking-tight text-accent/35 transition-colors duration-300 group-hover:text-accent/60",
           featured ? "text-[4rem] sm:text-[5rem]" : "text-[3rem] sm:text-[3.5rem]",
         )}
       >

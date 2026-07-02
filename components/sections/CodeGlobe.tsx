@@ -6,42 +6,203 @@ import { useEffect, useRef } from "react";
  * A single canvas drawing two layers:
  *  1. A live neural-network background — drifting nodes wired together (and to
  *     the cursor) with glowing synapse lines, showcasing the "AI" story.
- *  2. A rotating globe of code characters whose latitude rings project into
- *     concentric ellipses.
+ *  2. A rotating globe whose surface is a cloud of tokens: prominent AI model
+ *     names (bright, larger) scattered over a dense field of faint binary
+ *     digits + smaller model names — the whole sphere reading as "the AI
+ *     universe". Latitude rings project into concentric ellipses.
  * Auto-rotates; the cursor steers it on BOTH axes (horizontal + vertical).
  */
 
-const CHARS =
-  "01<>{}[]()/\\|=+-*#%$&;:.aiAIneuraldat01∑λπΔΩ◇◆▷·".split("");
+// Prominent, front-and-centre AI model names.
+// const MODELS = [
+//   "GPT", "Claude", "Gemini", "Llama", "DeepSeek", "Mistral", "Mixtral", "Grok",
+//   "Qwen", "Kimi", "Phi", "Gemma", "Falcon", "Mamba", "XGen", "Dolphin",
+//   "ChatGLM", "Pythia", "Alpaca", "Hermes", "Baichuan", "OpenLLaMA", "Zephyr",
+//   "Arctic", "DBRX", "BLOOM", "StableLM", "WizardLM", "MPT", "GLM", "Doubao",
+//   "Hunyuan", "ERNIE", "Aya", "MiniMax", "Jamba", "Yi", "InternLM", "Command",
+//   "Nemotron", "EXAONE", "Reka", "OLMo", "Vicuna", "Solar", "Jais", "Orca",
+//   "RWKV", "Granite", "Aquila", "RedPajama", "Codestral", "StarCoder", "Coder",
+// ];
+
+const MODELS = [
+  // Foundation AI
+  "AI",
+  "Machine Learning",
+  "Deep Learning",
+  "Neural Networks",
+  "Generative AI",
+  "Agentic AI",
+  "Autonomous AI",
+  "Foundation Models",
+  "Multimodal AI",
+  "Responsible AI",
+
+  // Large Language Models
+  "LLM",
+  "GPT",
+  "Claude",
+  "Gemini",
+  "Llama",
+  "Mistral",
+  "Qwen",
+  "DeepSeek",
+  "Phi",
+  "Gemma",
+
+  // Core AI Concepts
+  "RAG",
+  "Embeddings",
+  "Vector Database",
+  "Semantic Search",
+  "Prompt Engineering",
+  "Fine-tuning",
+  "Inference",
+  "Tokenization",
+  "Context Window",
+  "Attention",
+  "Transformer",
+  "Knowledge Graph",
+  "Reasoning",
+  "Memory",
+  "Hallucination",
+  "Grounding",
+  "Chunking",
+  "Re-ranking",
+  "Retrieval",
+  "Indexing",
+
+  // AI Agents
+  "AI Agent",
+  "Multi-Agent",
+  "Agent Orchestration",
+  "Planning",
+  "Tool Calling",
+  "Function Calling",
+  "Workflow Automation",
+  "Autonomous Workflows",
+  "Human-in-the-Loop",
+  "Reflection",
+
+  // Data & Search
+  "Vector Search",
+  "Hybrid Search",
+  "Similarity Search",
+  "Metadata",
+  "Document Intelligence",
+  "OCR",
+  "Data Pipelines",
+  "Feature Store",
+  "Data Lake",
+  "Data Warehouse",
+
+  // Model Development
+  "Pretraining",
+  "Fine-tuning",
+  "PEFT",
+  "LoRA",
+  "RLHF",
+  "Distillation",
+  "Quantization",
+  "Model Evaluation",
+  "Benchmarking",
+  "Guardrails",
+
+  // Infrastructure
+  "GPU",
+  "TPU",
+  "CUDA",
+  "ONNX",
+  "TensorRT",
+  "Kubernetes",
+  "Docker",
+  "API",
+  "Model Serving",
+  "Inference Engine",
+
+  // Popular Frameworks & Tools
+  "LangChain",
+  "LangGraph",
+  "LlamaIndex",
+  "Hugging Face",
+  "vLLM",
+  "Ollama",
+  "MLflow",
+  "OpenAI",
+  "Anthropic",
+  "Vertex AI",
+  "Azure AI",
+  "Amazon Bedrock",
+
+  // Business AI
+  "AI Copilot",
+  "AI Assistant",
+  "Chatbot",
+  "Intelligent Automation",
+  "Decision Intelligence",
+  "Predictive Analytics",
+  "Personalization",
+  "Recommendation Engine",
+  "Enterprise AI",
+  "AI Governance"
+];
+
+// The faint background field is mostly binary, sprinkled with small models.
+const DIGITS = ["0", "1"];
 
 interface Node {
   x: number;
   y: number;
   z: number;
-  ci: number;
+  token: string;
+  // 2 = prominent model, 1 = faint model, 0 = binary digit
+  kind: 0 | 1 | 2;
   bright: number;
+}
+
+// Golden angle → the Fibonacci lattice that spaces points EVENLY on a sphere
+// (see fib()). Words + a faint binary field share the sphere surface.
+// (no pole clustering, no overlapping rings — the key to reading as a globe).
+const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+
+function fib(i: number, n: number, offset: number): { x: number; y: number; z: number } {
+  const y = 1 - (i / (n - 1)) * 2; // 1 → -1
+  const r = Math.sqrt(Math.max(0, 1 - y * y));
+  const theta = i * GOLDEN + offset;
+  return { x: Math.cos(theta) * r, y, z: Math.sin(theta) * r };
 }
 
 function buildNodes(): Node[] {
   const nodes: Node[] = [];
-  const rings = 22;
-  const perRingMax = 48;
-  for (let i = 0; i < rings; i++) {
-    const lat = -Math.PI / 2 + (Math.PI * i) / (rings - 1);
-    const y = Math.sin(lat);
-    const ringR = Math.cos(lat);
-    const count = Math.max(5, Math.round(perRingMax * ringR));
-    for (let j = 0; j < count; j++) {
-      const lon = (2 * Math.PI * j) / count + (i % 2) * 0.25;
-      nodes.push({
-        x: ringR * Math.cos(lon),
-        y,
-        z: ringR * Math.sin(lon),
-        ci: (Math.random() * CHARS.length) | 0,
-        bright: Math.random() > 0.86 ? 1 : 0.35 + Math.random() * 0.4,
-      });
-    }
+
+  // ── Words: spread evenly over the sphere, sampled across the whole list. ──
+  const WORD_COUNT = Math.min(MODELS.length, 82);
+  for (let i = 0; i < WORD_COUNT; i++) {
+    const { x, y, z } = fib(i, WORD_COUNT, 0);
+    const prominent = i % 3 === 0; // ~1/3 read as headline terms
+    nodes.push({
+      x,
+      y,
+      z,
+      token: MODELS[Math.floor((i * MODELS.length) / WORD_COUNT)],
+      kind: prominent ? 2 : 1,
+      bright: prominent ? 0.95 : 0.6,
+    });
   }
+
+  // ── Binary texture: a denser lattice, offset so digits sit BETWEEN words. ──
+  const DIGIT_COUNT = 150;
+  for (let i = 0; i < DIGIT_COUNT; i++) {
+    const { x, y, z } = fib(i, DIGIT_COUNT, 0.6);
+    nodes.push({
+      x,
+      y,
+      z,
+      token: Math.random() < 0.5 ? DIGITS[0] : DIGITS[1],
+      kind: 0,
+      bright: 0.3 + Math.random() * 0.25,
+    });
+  }
+
   return nodes;
 }
 
@@ -119,10 +280,8 @@ export function CodeGlobe({ className }: { className?: string }) {
     let userY = 0;
     let userX = 0;
     let raf = 0;
-    let frame = 0;
 
     const render = () => {
-      frame++;
       baseRot += 0.0045;
       userY += (targetY.current - userY) * 0.06;
       userX += (targetX.current - userX) * 0.06;
@@ -138,7 +297,9 @@ export function CodeGlobe({ className }: { className?: string }) {
       const cy = h / 2;
       const R = Math.min(w, h) * 0.42;
       const focal = 2.6;
-      const baseFont = Math.max(7, R * 0.052);
+      const digitFont = Math.max(6, R * 0.036);
+      const wordFont = Math.max(9, R * 0.05);
+      const bigFont = Math.max(11, R * 0.064);
 
       ctx.clearRect(0, 0, w, h);
 
@@ -194,11 +355,13 @@ export function CodeGlobe({ className }: { className?: string }) {
         ctx.fill();
       }
 
-      // ── Layer 2: code globe ──
+      // ── Layer 2: token globe ──
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      for (let m = 0; m < 14; m++) {
-        nodes[(Math.random() * nodes.length) | 0].ci = (Math.random() * CHARS.length) | 0;
+      // Living "code" shimmer: flip a few random binary digits each frame.
+      for (let m = 0; m < 12; m++) {
+        const n = nodes[(Math.random() * nodes.length) | 0];
+        if (n.kind === 0) n.token = Math.random() < 0.5 ? "0" : "1";
       }
 
       const drawList: {
@@ -206,10 +369,12 @@ export function CodeGlobe({ className }: { className?: string }) {
         sy: number;
         size: number;
         alpha: number;
+        depth: number;
         r: number;
         g: number;
         b: number;
-        ch: string;
+        token: string;
+        bold: boolean;
       }[] = [];
       for (let i = 0; i < nodes.length; i++) {
         const n = nodes[i];
@@ -223,33 +388,56 @@ export function CodeGlobe({ className }: { className?: string }) {
         const persp = focal / (focal - z2);
         const sx = cx + x2 * R * persp;
         const sy = cy + y2 * R * persp;
-        const depth = (z2 + 1) / 2;
-        const alpha = (0.1 + depth * 0.8) * (0.45 + n.bright * 0.55);
-        const t = Math.min(1, depth * 0.7 + n.bright * 0.5);
+        const depth = (z2 + 1) / 2; // 0 = back, 1 = front
+
+        // Depth pushes edge/back words "into" the sphere: they shrink (persp)
+        // AND fade steeply, so the front face stays crisp and clearly spherical.
+        const base = n.kind === 0 ? digitFont : n.kind === 2 ? bigFont : wordFont;
+        let alpha: number;
+        if (n.kind === 0) {
+          alpha = (0.04 + depth * 0.42) * (0.5 + n.bright * 0.5); // faint texture
+        } else {
+          const dd = depth * depth; // steeper front emphasis for words
+          alpha = (0.05 + dd * 0.95) * (0.6 + n.bright * 0.4);
+        }
+        const t = Math.min(1, depth * 0.75 + n.bright * 0.45);
+        // Pure-green ramp: dark green (back) → #4e8f52 (mid) → glowing green (front).
         drawList.push({
           sx,
           sy,
-          size: baseFont * persp,
+          size: base * persp,
           alpha,
-          r: Math.round(40 + t * 175),
-          g: Math.round(120 + t * 135),
-          b: Math.round(70 + t * 140),
-          ch: CHARS[n.ci],
+          depth,
+          r: Math.round(28 + t * 88),
+          g: Math.round(70 + t * 162),
+          b: Math.round(40 + t * 100),
+          token: n.token,
+          bold: n.kind === 2,
         });
       }
-      drawList.sort((p, q) => p.alpha - q.alpha);
+      // Painter's algorithm: far tokens first, near ones drawn on top.
+      drawList.sort((p, q) => p.depth - q.depth);
 
-      let lastSize = -1;
+      let lastFont = "";
       for (let i = 0; i < drawList.length; i++) {
         const d = drawList[i];
-        if (d.size !== lastSize) {
-          ctx.font = `${d.size.toFixed(1)}px "Courier New", monospace`;
-          lastSize = d.size;
+        const font = `${d.bold ? "700 " : ""}${d.size.toFixed(1)}px "Courier New", monospace`;
+        if (font !== lastFont) {
+          ctx.font = font;
+          lastFont = font;
         }
         ctx.globalAlpha = d.alpha;
         ctx.fillStyle = `rgb(${d.r},${d.g},${d.b})`;
-        ctx.fillText(d.ch, d.sx, d.sy);
+        // Only front-facing headline words glow — keeps the back clean + fast.
+        if (d.bold && d.depth > 0.62) {
+          ctx.shadowColor = "rgba(99,216,119,0.4)";
+          ctx.shadowBlur = d.size * 0.26;
+        } else {
+          ctx.shadowBlur = 0;
+        }
+        ctx.fillText(d.token, d.sx, d.sy);
       }
+      ctx.shadowBlur = 0;
       ctx.globalAlpha = 1;
 
       raf = requestAnimationFrame(render);

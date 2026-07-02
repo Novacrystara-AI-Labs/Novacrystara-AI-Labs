@@ -86,9 +86,20 @@ export function ContactForm({ bare = false }: { bare?: boolean }) {
             {...register("email")}
           />
         </Field>
-      </div>
 
-      <div className="mt-5">
+        <Field label="Phone number" error={errors.phone?.message} htmlFor="phone">
+          <input
+            id="phone"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="+1 555 123 4567"
+            aria-invalid={!!errors.phone}
+            className={cn(fieldBase, errors.phone && "border-red-500/70")}
+            {...register("phone")}
+          />
+        </Field>
+
         <Field label="Company" error={errors.company?.message} htmlFor="company" optional>
           <input
             id="company"

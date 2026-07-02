@@ -26,8 +26,8 @@ export function PainPointCard({
       {/* Sliding-up green hover background overlay */}
       <div className="pointer-events-none absolute inset-0 z-0 translate-y-full bg-[#e2f5e5] transition-transform duration-500 ease-nova group-hover:translate-y-0" />
 
-      {/* Corner index marker + crosshair tick */}
-      <span className="pointer-events-none absolute right-4 top-4 z-10 font-mono text-[11px] tracking-widest text-zinc-300 transition-colors duration-300 group-hover:text-accent">
+      {/* Small corner index — green */}
+      <span className="pointer-events-none absolute right-4 top-4 z-10 font-mono text-[11px] tracking-widest text-accent/60 transition-colors duration-300 group-hover:text-accent">
         {String(index + 1).padStart(2, "0")}
       </span>
 

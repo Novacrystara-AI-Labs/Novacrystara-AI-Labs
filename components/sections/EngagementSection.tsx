@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { engagement } from "@/content/engagement";
 import { Section } from "@/components/ui/Section";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -24,9 +25,18 @@ export function EngagementSection() {
       </div>
 
       <Reveal>
-        <p className="mx-auto mt-12 max-w-2xl text-balance text-center text-lg font-medium">
-          {engagement.closing}
-        </p>
+        <div className="mt-12 flex flex-col items-start gap-5 rounded-none border border-accent/25 bg-surface-raised p-7 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <p className="max-w-3xl text-pretty text-lg font-medium leading-relaxed text-foreground sm:text-xl">
+            {engagement.closing}
+          </p>
+          <a
+            href="#contact"
+            className="inline-flex shrink-0 items-center gap-2 rounded-none bg-accent px-5 py-2.5 text-sm font-semibold text-snow transition-all duration-300 hover:gap-3 hover:bg-accent-strong"
+          >
+            Let&apos;s talk
+            <ArrowRight aria-hidden className="size-4" />
+          </a>
+        </div>
       </Reveal>
     </Section>
   );

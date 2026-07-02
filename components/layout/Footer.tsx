@@ -1,7 +1,7 @@
 import type { ComponentType, SVGProps } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Mail } from "lucide-react";
+import { Mail, ArrowRight, ArrowUp } from "lucide-react";
 import { site } from "@/content/site";
 import { Container } from "@/components/ui/Container";
 
@@ -23,9 +23,9 @@ const GitHubIcon: IconType = (p) => (
     <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.22-3.37-1.22-.46-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.05 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05a9.4 9.4 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.92-2.34 4.79-4.57 5.04.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z" />
   </svg>
 );
-const YouTubeIcon: IconType = (p) => (
+const InstagramIcon: IconType = (p) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...p}>
-    <path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z" />
+    <path d="M12 2c2.72 0 3.06.01 4.12.06 1.07.05 1.79.22 2.43.47.66.26 1.22.6 1.77 1.15.55.55.89 1.11 1.15 1.77.25.64.42 1.36.47 2.43.05 1.06.06 1.4.06 4.12s-.01 3.06-.06 4.12c-.05 1.07-.22 1.79-.47 2.43a4.9 4.9 0 0 1-1.15 1.77c-.55.55-1.11.89-1.77 1.15-.64.25-1.36.42-2.43.47-1.06.05-1.4.06-4.12.06s-3.06-.01-4.12-.06c-1.07-.05-1.79-.22-2.43-.47a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.25-.64-.42-1.36-.47-2.43C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.07.22-1.79.47-2.43.26-.66.6-1.22 1.15-1.77.55-.55 1.11-.89 1.77-1.15.64-.25 1.36-.42 2.43-.47C8.94 2.01 9.28 2 12 2zm0 1.8c-2.67 0-2.99.01-4.04.06-.98.04-1.51.21-1.86.35-.47.18-.8.4-1.15.75-.35.35-.57.68-.75 1.15-.14.35-.31.88-.35 1.86-.05 1.05-.06 1.37-.06 4.04s.01 2.99.06 4.04c.04.98.21 1.51.35 1.86.18.47.4.8.75 1.15.35.35.68.57 1.15.75.35.14.88.31 1.86.35 1.05.05 1.37.06 4.04.06s2.99-.01 4.04-.06c.98-.04 1.51-.21 1.86-.35.47-.18.8-.4 1.15-.75.35-.35.57-.68.75-1.15.14-.35.31-.88.35-1.86.05-1.05.06-1.37.06-4.04s-.01-2.99-.06-4.04c-.04-.98-.21-1.51-.35-1.86a3.1 3.1 0 0 0-.75-1.15 3.1 3.1 0 0 0-1.15-.75c-.35-.14-.88-.31-1.86-.35-1.05-.05-1.37-.06-4.04-.06zm0 3.06a5.14 5.14 0 1 1 0 10.28 5.14 5.14 0 0 1 0-10.28zm0 1.8a3.34 3.34 0 1 0 0 6.68 3.34 3.34 0 0 0 0-6.68zm5.34-3.14a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z" />
   </svg>
 );
 
@@ -34,21 +34,22 @@ const socials: { label: string; href: string; Icon: IconType }[] = [
   { label: "LinkedIn", href: "#", Icon: LinkedInIcon },
   { label: "X (Twitter)", href: "#", Icon: XIcon },
   { label: "GitHub", href: "#", Icon: GitHubIcon },
-  { label: "YouTube", href: "#", Icon: YouTubeIcon },
+  { label: "Instagram", href: "#", Icon: InstagramIcon },
 ];
 
-/** Site footer — dark brand block: logo, slogan, contact, socials, nav, legal. */
+/** Site footer — dark brand block: logo, slogan, contact, socials, nav, CTA, legal. */
 export function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-ink text-white">
-      {/* Subtle green top glow */}
+      {/* Subtle green top glow + blueprint texture */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(60%_100%_at_50%_0%,rgba(78,143,82,0.14),transparent)]"
       />
+      <div aria-hidden className="bg-blueprint-dark pointer-events-none absolute inset-0 opacity-30" />
 
       <Container className="relative py-14 md:py-16">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
+        <div className="grid gap-12 lg:grid-cols-[1.7fr_1fr_1.1fr]">
           {/* Brand */}
           <div className="max-w-sm">
             <Link href="#top" aria-label={site.brand} className="flex items-center gap-2.5">
@@ -60,16 +61,20 @@ export function Footer() {
                 className="h-11 w-auto"
               />
               <Image
-                src="/images/novacrystara_logo_1_2.png"
+                src="/images/novacrystara_logo_1_4.png"
                 alt={site.brand}
-                width={744}
-                height={172}
-                className="h-7 w-auto"
+                width={747}
+                height={222}
+                className="h-8 w-auto"
               />
             </Link>
 
             <p className="mt-6 font-mono text-sm uppercase tracking-[0.22em] text-[#7ed98d]">
               {site.footer.tagline}
+            </p>
+
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
+              {site.description}
             </p>
 
             <a
@@ -98,29 +103,58 @@ export function Footer() {
           </div>
 
           {/* Nav */}
-          <nav aria-label="Footer" className="lg:justify-self-end">
+          <nav aria-label="Footer" className="lg:justify-self-center">
             <p className="font-mono text-xs uppercase tracking-widest text-white/40">Navigate</p>
-            <ul className="mt-5 grid grid-cols-2 gap-x-14 gap-y-3.5">
+            <ul className="mt-5 space-y-3.5">
               {site.footer.links.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/70 transition-colors hover:text-white focus-visible:outline-none focus-visible:text-white"
+                    className="group inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors hover:text-white focus-visible:text-white focus-visible:outline-none"
                   >
+                    <span className="h-px w-0 bg-[#7ed98d] transition-all duration-300 group-hover:w-4" />
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
+
+          {/* Get started — CTA column */}
+          <div>
+            <p className="font-mono text-xs uppercase tracking-widest text-white/40">Get started</p>
+            <p className="mt-5 text-pretty text-sm leading-relaxed text-white/70">
+              Book a discovery session and walk away with a prioritized, boardroom-ready AI roadmap.
+            </p>
+            <Link
+              href={site.primaryCta.href}
+              className="group mt-6 inline-flex items-center gap-2 bg-accent px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              {site.primaryCta.label}
+              <ArrowRight aria-hidden className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+            <p className="mt-5 flex items-center gap-2 text-xs text-white/45">
+              <span className="inline-block size-1.5 animate-pulse rounded-full bg-[#7ed98d]" />
+              Typically responds within one business day.
+            </p>
+          </div>
         </div>
 
         {/* Legal */}
         <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-white/45">{site.footer.legal}</p>
-          <p className="font-mono text-xs uppercase tracking-widest text-white/40">
-            Enterprise AI, delivered.
-          </p>
+          <div className="flex items-center gap-5">
+            <p className="font-mono text-xs uppercase tracking-widest text-white/40">
+              Enterprise AI, delivered.
+            </p>
+            <Link
+              href="#top"
+              aria-label="Back to top"
+              className="inline-flex size-8 items-center justify-center border border-white/15 text-white/60 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#7ed98d] hover:text-[#7ed98d]"
+            >
+              <ArrowUp aria-hidden className="size-4" />
+            </Link>
+          </div>
         </div>
       </Container>
     </footer>

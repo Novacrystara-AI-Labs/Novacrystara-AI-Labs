@@ -1,15 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import {
-  AnimatePresence,
-  motion,
-  useScroll,
-  useMotionValueEvent,
-  useReducedMotion,
-  type Variants,
-} from "framer-motion";
-import { Compass, Blocks, Hammer, Rocket, RefreshCw, type LucideIcon } from "lucide-react";
+import { useRef } from "react";
+import { motion, useInView, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { methodology } from "@/content/methodology";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -19,222 +11,102 @@ import type { Phase } from "@/types";
 
 const phases = methodology.phases;
 
-// Per-phase icon (by title) for the detail panel.
-const phaseIcons: Record<string, LucideIcon> = {
-  Discovery: Compass,
-  Architecture: Blocks,
-  Build: Hammer,
-  Deploy: Rocket,
-  "Continuous Optimization": RefreshCw,
-};
-
 /**
  * SECTION 6 — Methodology / Approach (arch §5 #6).
- * Desktop: a pinned scroll-stage — a large active phase number + label on the
- * left, a centered timeline node on the divider, and the active phase detail on
- * the right; all crossfade as you scroll through the phases.
- * Mobile / reduced-motion: a clean static stack.
+ * All phases visible at once: a vertical timeline with big green numbers, a
+ * green "beam" that fills with scroll, and nodes that ignite as they enter view.
  */
 export function MethodologySection() {
+  const trackRef = useRef<HTMLOListElement>(null);
   const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ["start 75%", "end 65%"],
+  });
+  const beamScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
-    <section id="approach" className="scroll-mt-24">
-      {/* Intro */}
-      <Container className="py-14 md:pt-16 md:pb-8">
+    <section id="approach" className="scroll-mt-24 py-16 md:py-24">
+      <Container>
         <Reveal className="max-w-3xl">
-          <Eyebrow label="Our Approach" index={6} />
+          <Eyebrow label="Our Approach" />
           <h2 className="mt-5 text-balance text-h2 font-semibold">{methodology.heading}</h2>
           <p className="mt-4 text-pretty text-lg text-muted">{methodology.intro}</p>
         </Reveal>
-      </Container>
 
-      {!reduce ? <PinnedStepper /> : null}
-      <StaticStack className={reduce ? "" : "lg:hidden"} />
+        <ol ref={trackRef} className="relative mt-14">
+          {/* Track + scroll-fill beam (aligned to the node column centre) */}
+          <span
+            aria-hidden
+            className="absolute bottom-5 left-[5.25rem] top-5 w-px bg-border md:left-[7.5rem]"
+          />
+          <motion.span
+            aria-hidden
+            style={reduce ? { scaleY: 1 } : { scaleY: beamScale }}
+            className="absolute left-[5.25rem] top-5 h-[calc(100%-2.5rem)] w-px origin-top bg-gradient-to-b from-accent to-accent/40 shadow-[0_0_10px_rgba(78,143,82,0.5)] md:left-[7.5rem]"
+          />
+
+          {phases.map((phase, i) => (
+            <TimelineRow key={phase.title} phase={phase} index={i} last={i === phases.length - 1} />
+          ))}
+        </ol>
+      </Container>
     </section>
   );
 }
 
-/* ── Desktop pinned scroll-stage ─────────────────────────────────────────── */
-
-const swap: Variants = {
-  enter: (d: number) => ({ opacity: 0, y: d > 0 ? 34 : -34 }),
-  center: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
-  exit: (d: number) => ({ opacity: 0, y: d > 0 ? -28 : 28, transition: { duration: 0.28 } }),
-};
-
-function PinnedStepper() {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const prev = useRef(0);
-  const [active, setActive] = useState(0);
-  const [dir, setDir] = useState(1);
-  const count = phases.length;
-
-  const { scrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ["start start", "end end"],
-  });
-
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const i = Math.min(count - 1, Math.max(0, Math.floor(v * count)));
-    if (i !== prev.current) {
-      setDir(i > prev.current ? 1 : -1);
-      prev.current = i;
-      setActive(i);
-    }
-  });
-
-  const phase = phases[active];
-  const num = String(active + 1).padStart(2, "0");
-  const PhaseIcon = phaseIcons[phase.title] ?? Compass;
+function TimelineRow({ phase, index, last }: { phase: Phase; index: number; last: boolean }) {
+  const ref = useRef<HTMLLIElement>(null);
+  const reduce = useReducedMotion();
+  const inView = useInView(ref, { once: true, margin: "0px 0px -25% 0px" });
+  const active = reduce || inView;
+  const num = String(index + 1).padStart(2, "0");
 
   return (
-    <div
-      ref={trackRef}
-      className="relative hidden lg:block"
-      style={{ height: `${count * 100}vh` }}
+    <li
+      ref={ref}
+      className={cn(
+        "grid grid-cols-[3.5rem_1.5rem_1fr] items-start gap-x-4 md:grid-cols-[5rem_2rem_1fr] md:gap-x-6",
+        last ? "pb-0" : "pb-12 md:pb-16",
+      )}
     >
-      <div className="sticky top-16 flex h-[calc(100svh-4rem)] items-center overflow-hidden">
-        {/* Faint blueprint wash */}
-        <div
-          aria-hidden
-          className="bg-blueprint mask-radial-fade pointer-events-none absolute inset-0 opacity-50"
-        />
+      {/* Big green number */}
+      <div className="pt-1 text-right font-mono text-4xl font-bold leading-none text-accent/35 md:text-6xl">
+        {num}
+      </div>
 
-        {/* Central divider + node (aligned to viewport center = container center) */}
-        <div
-          aria-hidden
-          className="absolute left-1/2 top-1/2 h-[68vh] w-px -translate-x-1/2 -translate-y-1/2 bg-gradient-to-b from-transparent via-border to-transparent"
+      {/* Node on the beam */}
+      <div className="relative flex justify-center pt-3">
+        <span
+          className={cn(
+            "relative z-10 size-3.5 rounded-full border-2 transition-all duration-500",
+            active
+              ? "border-accent bg-accent shadow-[0_0_0_5px_rgba(78,143,82,0.15)]"
+              : "border-border bg-background",
+          )}
         />
-        <div
-          aria-hidden
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        >
-          <span className="relative flex size-4 items-center justify-center">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent/50" />
-            <span className="relative size-4 rounded-full border-2 border-background bg-accent shadow-[0_0_0_5px_rgba(78,143,82,0.15)]" />
+      </div>
+
+      {/* Content */}
+      <motion.div
+        initial={reduce ? false : { opacity: 0, y: 16 }}
+        animate={active ? { opacity: 1, y: 0 } : undefined}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="pb-2"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+            {phase.title}
+          </p>
+          <span className="rounded-none border border-border px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-muted">
+            Phase {num} / {String(phases.length).padStart(2, "0")}
           </span>
         </div>
-
-        <Container className="relative w-full">
-          <div className="grid grid-cols-2 items-center gap-16">
-            {/* Left — big number + label + progress */}
-            <div className="pr-12 xl:pr-20">
-              <AnimatePresence mode="wait" custom={dir} initial={false}>
-                <motion.div
-                  key={active}
-                  custom={dir}
-                  variants={swap}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                >
-                  <div className="text-[clamp(6rem,13vw,11rem)] font-semibold leading-none tracking-tight text-accent">
-                    {num}
-                  </div>
-                  <div className="mt-2 text-4xl font-bold tracking-tight text-foreground xl:text-5xl">
-                    {phase.title}
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Segmented progress */}
-              <div className="mt-10 flex max-w-md gap-2">
-                {phases.map((p, i) => (
-                  <span
-                    key={p.title}
-                    className={cn(
-                      "h-1.5 flex-1 rounded-full transition-all duration-500",
-                      i <= active ? "bg-accent" : "bg-border",
-                    )}
-                  />
-                ))}
-              </div>
-              <p className="mt-4 font-mono text-xs uppercase tracking-widest text-muted">
-                Phase {num} / {String(count).padStart(2, "0")}
-              </p>
-            </div>
-
-            {/* Right — active phase detail */}
-            <div className="pl-12 xl:pl-20">
-              <AnimatePresence mode="wait" custom={dir} initial={false}>
-                <motion.div
-                  key={active}
-                  custom={dir}
-                  variants={swap}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="relative max-w-xl"
-                >
-                  {/* Crop-mark frame corners */}
-                  <span
-                    aria-hidden
-                    className="absolute -left-5 -top-5 size-7 border-l-2 border-t-2 border-accent/40"
-                  />
-                  <span
-                    aria-hidden
-                    className="absolute -bottom-5 -right-5 size-7 border-b-2 border-r-2 border-accent/40"
-                  />
-
-                  {/* Ghost icon watermark */}
-                  <PhaseIcon
-                    aria-hidden
-                    className="pointer-events-none absolute -right-2 top-0 size-40 text-accent/[0.06]"
-                  />
-
-                  <div className="relative">
-                    <span className="inline-flex size-12 items-center justify-center border border-accent/30 bg-accent/10 text-accent">
-                      <PhaseIcon aria-hidden className="size-6" />
-                    </span>
-
-                    <h3 className="mt-6 text-balance text-3xl font-bold tracking-tight text-foreground xl:text-4xl">
-                      {phase.headline ?? phase.title}
-                    </h3>
-                    <p className="mt-4 max-w-md text-pretty text-lg leading-relaxed text-muted">
-                      {phase.description}
-                    </p>
-
-                    {/* Decorative accent line */}
-                    <div className="mt-7 h-px w-full max-w-md bg-gradient-to-r from-accent/50 via-accent/20 to-transparent" />
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        </Container>
-      </div>
-    </div>
-  );
-}
-
-/* ── Mobile / reduced-motion static stack ────────────────────────────────── */
-
-function StaticStack({ className }: { className?: string }) {
-  return (
-    <Container className={cn("pb-16 md:pb-20", className)}>
-      <ol className="relative border-l border-border pl-8">
-        {phases.map((phase, i) => (
-          <StaticRow key={phase.title} phase={phase} index={i} last={i === phases.length - 1} />
-        ))}
-      </ol>
-    </Container>
-  );
-}
-
-function StaticRow({ phase, index, last }: { phase: Phase; index: number; last: boolean }) {
-  const num = String(index + 1).padStart(2, "0");
-  return (
-    <li className={cn("relative", last ? "" : "pb-12")}>
-      <span className="absolute -left-[2.55rem] top-1 flex size-6 items-center justify-center rounded-full border border-accent bg-background font-mono text-[10px] text-accent">
-        {num}
-      </span>
-      <span className="font-mono text-5xl font-semibold leading-none text-accent/90">{num}</span>
-      <h3 className="mt-2 text-2xl font-bold tracking-tight text-foreground">{phase.title}</h3>
-      <p className="mt-1 font-mono text-xs uppercase tracking-widest text-accent">
-        {phase.headline ?? phase.title}
-      </p>
-      <p className="mt-3 max-w-xl text-pretty text-muted">{phase.description}</p>
+        <h3 className="mt-2 text-balance text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+          {phase.headline ?? phase.title}
+        </h3>
+        <p className="mt-2 max-w-xl text-pretty leading-relaxed text-muted">{phase.description}</p>
+      </motion.div>
     </li>
   );
 }

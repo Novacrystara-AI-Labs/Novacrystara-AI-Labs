@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { fontSans, fontMono } from "./fonts";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { DiscoveryProvider } from "@/components/providers/DiscoveryProvider";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -52,9 +53,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${fontSans.variable} ${fontMono.variable}`}>
       <body>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <DiscoveryProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </DiscoveryProvider>
       </body>
     </html>
   );
