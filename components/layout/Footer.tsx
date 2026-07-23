@@ -19,6 +19,10 @@ const InstagramIcon: IconType = (p) => (
   </svg>
 );
 
+// Section anchors live on the home page — make them absolute so they also work
+// from sub-pages like /agents/nova-helix.
+const home = (href: string) => (href.startsWith("#") ? `/${href}` : href);
+
 const socials: { label: string; href: string; Icon: IconType }[] = [
   { label: "LinkedIn", href: "https://www.linkedin.com/company/novacrystara", Icon: LinkedInIcon },
   { label: "Instagram", href: "https://www.instagram.com/novacrystara", Icon: InstagramIcon },
@@ -39,7 +43,7 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.7fr_1fr_1.1fr]">
           {/* Brand */}
           <div className="max-w-sm">
-            <Link href="#top" aria-label={site.brand} className="flex items-center gap-2.5">
+            <Link href="/#top" aria-label={site.brand} className="flex items-center gap-2.5">
               <Image
                 src="/images/novacrystara_logo_1_1.png"
                 alt=""
@@ -96,7 +100,7 @@ export function Footer() {
               {site.footer.links.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={link.href}
+                    href={home(link.href)}
                     className="group inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors hover:text-white focus-visible:text-white focus-visible:outline-none"
                   >
                     <span className="h-px w-0 bg-[#7ed98d] transition-all duration-300 group-hover:w-4" />
@@ -114,7 +118,7 @@ export function Footer() {
               Book a discovery session and walk away with a prioritized, boardroom-ready AI roadmap.
             </p>
             <Link
-              href={site.primaryCta.href}
+              href={home(site.primaryCta.href)}
               className="group mt-6 inline-flex items-center gap-2 bg-accent px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               {site.primaryCta.label}
@@ -135,7 +139,7 @@ export function Footer() {
               Enterprise AI, delivered.
             </p>
             <Link
-              href="#top"
+              href="/#top"
               aria-label="Back to top"
               className="inline-flex size-8 items-center justify-center border border-white/15 text-white/60 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#7ed98d] hover:text-[#7ed98d]"
             >

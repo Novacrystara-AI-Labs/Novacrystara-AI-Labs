@@ -88,6 +88,7 @@ export function DiscoveryProvider({ children }: { children: ReactNode }) {
             <AnimatePresence>
               {open ? (
                 <motion.div
+                  data-lenis-prevent
                   className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto p-4 sm:items-center sm:p-6"
                   initial={reduce ? undefined : { opacity: 0 }}
                   animate={{ opacity: 1 }}

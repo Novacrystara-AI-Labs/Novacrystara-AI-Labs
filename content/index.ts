@@ -12,3 +12,4 @@ export { about } from "./about";
 export { trust } from "./trust";
 export { faq } from "./faq";
 export { site } from "./site";
+export { agents, agentsIntro, liveAgents } from "./agents";

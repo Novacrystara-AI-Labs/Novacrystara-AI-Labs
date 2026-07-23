@@ -143,6 +143,21 @@ export interface FAQContent {
   items: FAQItem[];
 }
 
+/* Autonomous agents — the "Solutions" mega-menu registry + agent landing pages */
+export interface Agent {
+  /** Route slug under /agents. Only used when `status === "live"`. */
+  slug: string;
+  name: string;
+  /** Role line, e.g. "Autonomous Hiring Employee". */
+  role: string;
+  description: string;
+  /** Lucide icon name resolved in the mega-menu / grid. */
+  icon: string;
+  status: "live" | "coming-soon";
+  /** Short launch hint shown on locked cards, e.g. "Q3 2026". */
+  eta?: string;
+}
+
 /* Global — Site chrome */
 export interface SiteContent {
   brand: string;

@@ -3,6 +3,7 @@ import { fontSans, fontMono } from "./fonts";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { DiscoveryProvider } from "@/components/providers/DiscoveryProvider";
+import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${fontSans.variable} ${fontMono.variable}`}>
       <body>
+        <SmoothScroll />
         <DiscoveryProvider>
           <Navbar />
           <main>{children}</main>

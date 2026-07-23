@@ -1,5 +1,7 @@
-import { Bot, Layers, Workflow, Puzzle, RefreshCw, type LucideIcon } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Bot, Layers, Workflow, Puzzle, RefreshCw, type LucideIcon } from "lucide-react";
 import { solutions } from "@/content/solutions";
+import { liveAgents } from "@/content/agents";
 import { Section } from "@/components/ui/Section";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
@@ -46,6 +48,35 @@ export function SolutionsSection() {
               className={spans[i]}
             />
           ))}
+        </div>
+      </Reveal>
+
+      {/* Shipped autonomous employees — route into their landing pages. */}
+      <Reveal>
+        <div className="mt-8 flex flex-col gap-5 border border-white/10 bg-ink px-6 py-7 text-white sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.25em] text-[#7ed98d]">
+              Autonomous AI employees
+            </p>
+            <p className="mt-2 text-pretty text-lg font-semibold">
+              Meet the agents already doing the work — starting with Nova Helix.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {liveAgents.map((agent) => (
+              <Link
+                key={agent.slug}
+                href={`/agents/${agent.slug}`}
+                className="group inline-flex items-center gap-2 bg-accent px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#5fa863] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7ed98d] focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+              >
+                {agent.name}
+                <ArrowRight
+                  aria-hidden
+                  className="size-4 transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </Link>
+            ))}
+          </div>
         </div>
       </Reveal>
     </Section>
