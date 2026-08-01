@@ -23,12 +23,6 @@ const spans = ["sm:col-span-2 lg:col-span-2", "", "", "", ""];
 export function SolutionsSection() {
   return (
     <Section id="solutions" className="relative overflow-hidden">
-      {/* Faint blueprint grid wash */}
-      <div
-        aria-hidden
-        className="bg-blueprint mask-fade-b pointer-events-none absolute inset-0 -z-10 opacity-60"
-      />
-
       <Reveal className="max-w-3xl">
         <Eyebrow label="What We Build" />
         <h2 className="mt-5 text-balance text-h2 font-semibold">{solutions.heading}</h2>

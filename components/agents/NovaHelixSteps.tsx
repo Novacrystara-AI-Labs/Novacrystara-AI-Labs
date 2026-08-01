@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { novaHelix } from "@/content/novaHelix";
@@ -50,6 +51,36 @@ export function NovaHelixSteps() {
             <StepRow key={step.title} step={step} index={i} last={i === steps.length - 1} />
           ))}
         </ol>
+
+        {/* Where the timeline lands — the seven automated steps hand off to the
+            human team for the work only people should do. The image closes the
+            sequence on that note rather than ending on empty space. */}
+        <Reveal className="mt-14 md:mt-16">
+          <figure className="group relative overflow-hidden border border-border bg-ink">
+            <div className="relative aspect-[3/2] w-full sm:aspect-[2.2/1] lg:aspect-[2.5/1]">
+              <Image
+                src="/images/group_discuss.png"
+                alt="An HR team gathered around a laptop, discussing candidates together"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1152px"
+                className="object-cover object-center transition-transform duration-[900ms] ease-nova group-hover:scale-[1.03]"
+              />
+              {/* Legibility scrim under the caption — no hard seam */}
+              <div
+                aria-hidden
+                className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent"
+              />
+            </div>
+
+            <figcaption className="absolute inset-x-0 bottom-0 p-5 sm:p-8">
+              <Eyebrow label="Where humans create the most value" tone="dark" />
+              <p className="mt-2 max-w-2xl text-pretty text-lg font-semibold leading-snug text-white sm:text-xl">
+                The monotonous work is handled. Now your recruiters do what they were
+                hired for — building relationships and making the decisions that matter.
+              </p>
+            </figcaption>
+          </figure>
+        </Reveal>
       </Container>
     </section>
   );

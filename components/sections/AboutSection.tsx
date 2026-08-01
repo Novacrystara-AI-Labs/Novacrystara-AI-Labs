@@ -63,9 +63,8 @@ export function AboutSection() {
         {/* Right — premium stat panel */}
         <Reveal className="lg:sticky lg:top-28 lg:self-start">
           <div className="relative overflow-hidden border border-white/10 bg-ink p-8 text-white shadow-[0_30px_90px_-30px_rgba(78,143,82,0.35)] sm:p-10">
-            {/* ambient glow + blueprint */}
+            {/* ambient glow */}
             <div aria-hidden className="pointer-events-none absolute inset-0">
-              <div className="bg-blueprint-dark absolute inset-0 opacity-40" />
               <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(78,143,82,0.35),transparent_70%)] blur-2xl" />
             </div>
 

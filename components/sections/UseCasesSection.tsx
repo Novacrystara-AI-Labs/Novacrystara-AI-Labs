@@ -270,7 +270,6 @@ export function UseCasesSection() {
                 <>
                   {/* Ambient */}
                   <div aria-hidden className="pointer-events-none absolute inset-0">
-                    <div className="bg-blueprint-dark absolute inset-0 opacity-50" />
                     <CodeParticles
                       className="mask-radial-fade absolute inset-0"
                       maxOpacity={0.08}

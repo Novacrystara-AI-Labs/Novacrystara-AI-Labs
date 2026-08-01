@@ -16,7 +16,6 @@ const { hero } = novaHelix;
 export function NovaHelixHero() {
   return (
     <section id="top" className="relative overflow-hidden bg-background pt-16">
-      <div aria-hidden className="bg-blueprint mask-fade-b pointer-events-none absolute inset-0" />
       <div
         aria-hidden
         className="pointer-events-none absolute -left-40 -top-24 h-96 w-[40rem] rounded-full bg-[radial-gradient(circle,rgba(78,143,82,0.16),transparent_70%)] blur-2xl"
@@ -124,11 +123,11 @@ export function NovaHelixHero() {
               <div className="relative">
                 <Eyebrow label={hero.price.badge} tone="dark" />
 
-                <p className="mt-5 flex items-baseline gap-2">
-                  <span className="text-5xl font-bold tracking-tight text-white">
+                <p className="mt-5 flex items-baseline gap-3">
+                  <span className="text-6xl font-bold tracking-tight text-white">
                     {hero.price.amount}
                   </span>
-                  <span className="font-mono text-sm uppercase tracking-widest text-white/50">
+                  <span className="font-mono text-sm uppercase tracking-[0.2em] text-[#7ed98d]">
                     {hero.price.unit}
                   </span>
                 </p>
@@ -148,16 +147,21 @@ export function NovaHelixHero() {
                   href="#book-demo"
                   className="group mt-8 flex w-full items-center justify-center gap-2 bg-accent px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-[#5fa863] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7ed98d] focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
                 >
-                  Book Live Demo
+                  {hero.price.cta}
                   <ArrowRight
                     aria-hidden
                     className="size-4 transition-transform duration-300 group-hover:translate-x-1"
                   />
                 </Link>
 
-                <p className="mt-5 flex items-center gap-2 text-xs text-white/45">
+                <p className="mt-4 flex items-center justify-center gap-2 text-xs font-medium text-white/70">
+                  <Check aria-hidden className="size-3.5 text-[#7ed98d]" />
+                  {hero.price.assurance}
+                </p>
+
+                <p className="mt-4 flex items-center gap-2 border-t border-white/10 pt-4 text-xs text-white/45">
                   <span className="inline-block size-1.5 animate-pulse rounded-full bg-[#7ed98d]" />
-                  Founder beta seats are limited.
+                  {hero.price.footnote}
                 </p>
               </div>
             </div>

@@ -50,7 +50,10 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 type CategoryId = "agents" | "solutions" | "use-cases";
 
 const categories: { id: CategoryId; label: string }[] = [
-  { id: "agents", label: "Autonomous AI Employees" },
+  // The autonomous-agents tab now lives in its own dedicated "AI Employees"
+  // mega-menu, so it's removed from here to avoid duplication. Kept commented
+  // (along with AgentsPane below) so it can be restored if ever needed.
+  // { id: "agents", label: "Autonomous AI Employees" },
   { id: "solutions", label: "By solution" },
   { id: "use-cases", label: "By use case" },
 ];
@@ -62,7 +65,7 @@ const categories: { id: CategoryId; label: string }[] = [
  * locked glassmorphism tiles.
  */
 export function SolutionsMegaMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [category, setCategory] = useState<CategoryId>("agents");
+  const [category, setCategory] = useState<CategoryId>("solutions");
   const reduce = useReducedMotion();
 
   // Everything that must dismiss the panel. Route changes alone aren't enough:
@@ -118,7 +121,7 @@ export function SolutionsMegaMenu({ open, onClose }: { open: boolean; onClose: (
   // Always reopen on the default pane. Kept separate from the effect above so a
   // parent re-render (which recreates `onClose`) can't reset the active tab.
   useEffect(() => {
-    if (!open) setCategory("agents");
+    if (!open) setCategory("solutions");
   }, [open]);
 
   return (
@@ -147,11 +150,6 @@ export function SolutionsMegaMenu({ open, onClose }: { open: boolean; onClose: (
             transition={{ duration: 0.62, ease: EASE }}
             className="fixed inset-x-0 top-16 z-50 flex h-[min(34rem,calc(100vh-8rem))] flex-col overflow-hidden border-b border-border bg-background shadow-[0_40px_100px_-30px_rgba(0,0,0,0.35)]"
           >
-            <div
-              aria-hidden
-              className="bg-blueprint pointer-events-none absolute inset-0 opacity-50"
-            />
-
             {/* Close — pinned to the panel, never scrolls away */}
             <button
               type="button"

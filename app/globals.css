@@ -146,22 +146,6 @@
    recoloured entirely into the white / #4e8f52 / black palette.)
    ────────────────────────────────────────────────────────────────────────── */
 @layer utilities {
-  /* Blueprint line grid — light surfaces */
-  .bg-blueprint {
-    background-image:
-      linear-gradient(to right, rgba(78, 143, 82, 0.07) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(78, 143, 82, 0.07) 1px, transparent 1px);
-    background-size: 56px 56px;
-  }
-
-  /* Blueprint line grid — dark surfaces */
-  .bg-blueprint-dark {
-    background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 56px 56px;
-  }
-
   /* Fine dotted grid */
   .bg-dotgrid {
     background-image: radial-gradient(rgba(78, 143, 82, 0.16) 1px, transparent 1px);

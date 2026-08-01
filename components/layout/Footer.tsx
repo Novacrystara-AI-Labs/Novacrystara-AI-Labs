@@ -37,8 +37,6 @@ export function Footer() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(60%_100%_at_50%_0%,rgba(78,143,82,0.14),transparent)]"
       />
-      <div aria-hidden className="bg-blueprint-dark pointer-events-none absolute inset-0 opacity-30" />
-
       <Container className="relative py-14 md:py-16">
         <div className="grid gap-12 lg:grid-cols-[1.7fr_1fr_1.1fr]">
           {/* Brand */}

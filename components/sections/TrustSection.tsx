@@ -35,7 +35,6 @@ export function TrustSection() {
     <Section id="trust">
       <Reveal className="relative overflow-hidden rounded-none border border-white/10 bg-ink p-8 text-white sm:p-12 lg:p-14">
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="bg-blueprint-dark mask-radial-fade absolute inset-0 opacity-60" />
           <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(78,143,82,0.25),transparent_70%)] blur-2xl" />
         </div>
 

@@ -9,6 +9,9 @@ export const site: SiteContent = {
     "Enterprise AI built by IT veterans — production-grade agents, platforms, and intelligent automation that deliver measurable outcomes, fast.",
   nav: [
     { label: "Solutions", href: "#solutions" },
+    // Sentinel href — the Navbar special-cases this to open the AI Employees
+    // mega-menu (agent roster) instead of jumping to a section.
+    { label: "AI Employees", href: "#ai-employees" },
     { label: "Use Cases", href: "#use-cases" },
     { label: "Approach", href: "#approach" },
     { label: "Capabilities", href: "#capabilities" },

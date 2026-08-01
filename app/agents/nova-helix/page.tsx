@@ -39,6 +39,15 @@ const WAVE_BARS = [
   74, 36, 64, 90, 46, 26,
 ];
 
+/**
+ * Running 01→13 index for the first capability in each stage, so the numbering
+ * flows continuously down the pipeline instead of resetting per stage.
+ */
+const capabilityStageStart = capabilities.groups.reduce<number[]>(
+  (acc, _g, i) => [...acc, i === 0 ? 0 : acc[i - 1] + capabilities.groups[i - 1].items.length],
+  [],
+);
+
 /** /agents/nova-helix — landing page for our first autonomous AI employee. */
 export default function NovaHelixPage() {
   return (
@@ -59,9 +68,8 @@ export default function NovaHelixPage() {
               <span className="inline-block size-1.5 bg-[#a83e33]" />
               Where the hours actually go
             </p>
-            {/* Each row is work that shouldn't need a human. The X marker and the
-                strikethrough that sweeps across on hover stage the elimination:
-                this is the list Nova Helix crosses off. */}
+            {/* Each row is work that shouldn't need a human — the X marker
+                carries the point; the row itself stays plainly readable. */}
             <ul className="border-t border-border">
               {problem.items.map((item, i) => (
                 <li
@@ -86,22 +94,7 @@ export default function NovaHelixPage() {
                     <X aria-hidden className="size-3.5" strokeWidth={3} />
                   </span>
 
-                  <span className="relative font-medium text-foreground transition-colors duration-300 group-hover:text-foreground/45">
-                    {item}
-                    <span
-                      aria-hidden
-                      className="ease-nova absolute left-0 top-1/2 h-px w-full origin-left scale-x-0 bg-[#a83e33] transition-transform duration-500 group-hover:scale-x-100"
-                    />
-                  </span>
-
-                  {/* Resolution chip — names what Nova Helix does with the row */}
-                  <span
-                    aria-hidden
-                    className="ease-nova relative ml-auto hidden shrink-0 translate-x-2 items-center gap-1.5 border border-[#a83e33]/30 bg-[#a83e33]/10 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-[#8f3128] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 sm:inline-flex"
-                  >
-                    <ArrowRight className="size-3" strokeWidth={2.5} />
-                    Automated
-                  </span>
+                  <span className="relative font-medium text-foreground">{item}</span>
                 </li>
               ))}
             </ul>
@@ -123,13 +116,14 @@ export default function NovaHelixPage() {
             {/* Kept short enough that the list governs the row height — the
                 image then flexes to fill, so both columns end flush. */}
             <div className="relative min-h-[17rem] flex-1 sm:min-h-[20rem]">
-              {/* The source is very low-key, so it needs lifting on black. */}
+              {/* Full-frame and well-exposed — only a light touch so it doesn't
+                  blow out; centred so the exhausted figure holds the frame. */}
               <Image
-                src="/images/helix_problem.png"
-                alt=""
+                src="/images/hr_exhaust.png"
+                alt="An overwhelmed HR recruiter slumped back at a desk buried in paperwork"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-center brightness-[1.6] contrast-[1.04] saturate-[1.15]"
+                className="object-cover object-center brightness-[1.04] contrast-[1.02] saturate-[1.03]"
               />
               {/* Soft dissolve into the copy block below — no hard seam */}
               <div
@@ -154,8 +148,6 @@ export default function NovaHelixPage() {
       {/* The claims read as a spec sheet, not a checklist: a dark instrument
           header, hairline rows, and a right-hand readout per row. */}
       <Section className="relative overflow-hidden bg-surface-raised">
-        <div aria-hidden className="bg-blueprint pointer-events-none absolute inset-0 opacity-60" />
-
         <div className="relative grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
           <Reveal>
             <Eyebrow label={solution.eyebrow} />
@@ -393,47 +385,117 @@ export default function NovaHelixPage() {
       </section>
 
       {/* ── Capabilities ────────────────────────────────────────────── */}
-      <Section className="bg-surface-raised">
-        <Reveal className="max-w-3xl">
-          <Eyebrow label={capabilities.eyebrow} />
-          <h2 className="mt-5 text-balance text-h2 font-semibold">{capabilities.heading}</h2>
-        </Reveal>
+      {/* Told as a pipeline, not a grid: the 13 capabilities are mapped to the
+          five stages of hiring and strung along a single spine, so the block
+          reads as one employee owning the whole funnel top to bottom. */}
+      <Section className="relative overflow-hidden bg-surface-raised">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-24 h-72 w-[40rem] translate-x-1/3 bg-[radial-gradient(closest-side,rgba(78,143,82,0.12),transparent)] blur-2xl"
+        />
 
-        <Reveal>
-          <ul className="mt-10 grid border-l border-t border-dashed border-zinc-400 sm:grid-cols-2 lg:grid-cols-3">
-            {capabilities.items.map((item, i) => {
-              // The final item stretches across the row so the block always
-              // closes flush — no orphaned cell, no dead space.
-              const last = i === capabilities.items.length - 1;
-              return (
-                <li
-                  key={item}
-                  className={cn(
-                    "group relative flex items-center gap-4 overflow-hidden border-b border-r border-dashed border-zinc-400 bg-white px-5 py-5 transition-colors duration-300",
-                    last && "sm:col-span-2 lg:col-span-3",
-                  )}
-                >
-                  {/* Solid brand green wipes up from the bottom edge */}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 translate-y-full bg-accent transition-transform duration-500 ease-nova group-hover:translate-y-0"
-                  />
-                  <span className="relative font-mono text-[11px] tracking-widest text-accent/45 transition-colors duration-300 group-hover:text-white/70">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="relative font-medium text-foreground transition-colors duration-300 group-hover:text-white">
-                    {item}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </Reveal>
+        <div className="relative grid gap-12 lg:grid-cols-[minmax(0,20rem)_1fr] lg:gap-16">
+          {/* Narrative rail — sticks alongside the pipeline on desktop */}
+          <Reveal className="lg:sticky lg:top-28 lg:self-start">
+            <Eyebrow label={capabilities.eyebrow} />
+            <h2 className="mt-5 text-balance text-h2 font-semibold">{capabilities.heading}</h2>
+            <p className="mt-5 text-pretty text-lg leading-relaxed text-muted">
+              {capabilities.intro}
+            </p>
+
+            <dl className="mt-8 grid grid-cols-3 gap-px border border-border bg-border">
+              {capabilities.meta.map((m) => (
+                <div key={m.label} className="bg-white px-4 py-4">
+                  <dt className="sr-only">{m.label}</dt>
+                  <dd>
+                    <span className="block text-2xl font-bold tracking-tight text-accent-strong">
+                      {m.value}
+                    </span>
+                    <span className="mt-1 block font-mono text-[10px] uppercase leading-tight tracking-[0.14em] text-muted/60">
+                      {m.label}
+                    </span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+
+          {/* The pipeline */}
+          <Reveal>
+            <ol>
+              {capabilities.groups.map((group, gi) => {
+                const last = gi === capabilities.groups.length - 1;
+                return (
+                  <li key={group.stage} className="relative pb-10 pl-16 last:pb-0 sm:pl-20">
+                    {/* Continuous spine — runs through every node but the last */}
+                    {!last && (
+                      <span
+                        aria-hidden
+                        className="absolute left-[19px] top-12 bottom-0 w-px bg-gradient-to-b from-accent/40 to-border sm:left-[23px]"
+                      />
+                    )}
+
+                    {/* Stage node — the number that anchors this phase */}
+                    <span className="absolute left-0 top-0 flex size-10 items-center justify-center bg-ink font-mono text-sm font-semibold text-white sm:size-12">
+                      {String(gi + 1).padStart(2, "0")}
+                      <span
+                        aria-hidden
+                        className="absolute -inset-1 border border-accent/25"
+                      />
+                    </span>
+
+                    {/* Stage heading + caption */}
+                    <div className="pt-0.5">
+                      <div className="flex items-baseline gap-3">
+                        <h3 className="text-h3 font-semibold tracking-tight text-foreground">
+                          {group.stage}
+                        </h3>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-accent/60">
+                          Stage {String(gi + 1).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <p className="mt-2 max-w-xl text-pretty leading-relaxed text-muted/80">
+                        {group.caption}
+                      </p>
+                    </div>
+
+                    {/* Capabilities in this stage */}
+                    <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                      {group.items.map((item, ii) => (
+                        <li
+                          key={item}
+                          className="group/cap relative flex items-center gap-3 overflow-hidden border border-border bg-white px-4 py-3.5 transition-colors duration-300 hover:border-accent/50"
+                        >
+                          {/* Accent wash + edge bar, matching the spec panels */}
+                          <span
+                            aria-hidden
+                            className="ease-nova pointer-events-none absolute inset-y-0 left-0 w-0 bg-accent/[0.07] transition-[width] duration-500 group-hover/cap:w-full"
+                          />
+                          <span
+                            aria-hidden
+                            className="ease-nova absolute inset-y-0 left-0 w-0.5 origin-center scale-y-0 bg-accent transition-transform duration-300 group-hover/cap:scale-y-100"
+                          />
+
+                          <span className="relative font-mono text-[10px] tabular-nums tracking-widest text-accent/45">
+                            {String(capabilityStageStart[gi] + ii + 1).padStart(2, "0")}
+                          </span>
+                          <span className="relative inline-flex size-5 shrink-0 items-center justify-center bg-accent/10 text-accent transition-colors duration-300 group-hover/cap:bg-accent group-hover/cap:text-white">
+                            <Check aria-hidden className="size-3" strokeWidth={3} />
+                          </span>
+                          <span className="relative font-medium text-foreground">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                );
+              })}
+            </ol>
+          </Reveal>
+        </div>
       </Section>
 
       {/* ── Why Nova Helix ──────────────────────────────────────────── */}
       <Section className="relative overflow-hidden">
-        <div aria-hidden className="bg-blueprint pointer-events-none absolute inset-0 opacity-70" />
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-0 h-64 w-[46rem] -translate-x-1/2 bg-[radial-gradient(closest-side,rgba(78,143,82,0.12),transparent)] blur-2xl"
@@ -533,12 +595,6 @@ export default function NovaHelixPage() {
 
           <Reveal>
             <div className="relative overflow-hidden border border-border bg-white shadow-[0_30px_80px_-32px_rgba(0,0,0,0.3)]">
-              {/* Accent cap + faint blueprint wash */}
-              <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-accent" />
-              <div
-                aria-hidden
-                className="bg-blueprint pointer-events-none absolute inset-0 opacity-70"
-              />
               {/* Oversized watermark price */}
               <span
                 aria-hidden
@@ -550,12 +606,12 @@ export default function NovaHelixPage() {
               <div className="relative p-9">
                 <Eyebrow label={founder.card.eyebrow} />
 
-                <p className="mt-6 flex items-baseline gap-2">
+                <p className="mt-6 flex items-baseline gap-3">
                   <span className="text-6xl font-bold tracking-tight text-foreground">
                     {founder.card.amount}
                   </span>
-                  <span className="font-mono text-xs uppercase tracking-widest text-muted/60">
-                    one-time
+                  <span className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+                    {founder.card.unit}
                   </span>
                 </p>
 
@@ -592,11 +648,6 @@ export default function NovaHelixPage() {
 
         <Reveal className="relative mx-auto max-w-5xl">
           <div className="relative overflow-hidden border border-border bg-white shadow-[0_44px_110px_-45px_rgba(0,0,0,0.45)]">
-            <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-accent" />
-            <div
-              aria-hidden
-              className="bg-blueprint pointer-events-none absolute inset-0 opacity-70"
-            />
             {/* Oversized watermark — the number is the whole promise */}
             <span
               aria-hidden

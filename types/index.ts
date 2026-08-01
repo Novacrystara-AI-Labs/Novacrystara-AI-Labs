@@ -156,6 +156,8 @@ export interface Agent {
   status: "live" | "coming-soon";
   /** Short launch hint shown on locked cards, e.g. "Q3 2026". */
   eta?: string;
+  /** A few headline capabilities, surfaced as chips on the featured card. */
+  highlights?: readonly string[];
 }
 
 /* Global — Site chrome */

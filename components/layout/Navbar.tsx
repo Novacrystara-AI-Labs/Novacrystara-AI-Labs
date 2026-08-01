@@ -8,7 +8,12 @@ import { Menu, X, ArrowDown, ChevronDown, ChevronRight } from "lucide-react";
 import { site } from "@/content/site";
 import { cn } from "@/lib/utils";
 import { SolutionsMegaMenu } from "./SolutionsMegaMenu";
+import { AgentsMegaMenu } from "./AgentsMegaMenu";
 import { MobileSolutionsPanel } from "./MobileSolutionsPanel";
+import { MobileAgentsPanel } from "./MobileAgentsPanel";
+
+/** Sentinel hrefs the Navbar intercepts to open a mega-menu, not navigate. */
+const MENU_TRIGGERS = new Set(["#solutions", "#ai-employees"]);
 
 /**
  * Full-width solid-black navbar: icon + wordmark on the left (the wordmark fades
@@ -19,6 +24,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
+  const [agentsOpen, setAgentsOpen] = useState(false);
   const pathname = usePathname();
   const onHome = pathname === "/";
 
@@ -38,8 +44,20 @@ export function Navbar() {
   // Never leave a menu hanging open across a route change.
   useEffect(() => {
     setMegaOpen(false);
+    setAgentsOpen(false);
     setOpen(false);
   }, [pathname]);
+
+  // The two desktop mega-menus are mutually exclusive — opening one closes the
+  // other so they can never stack.
+  const toggleMega = useCallback(() => {
+    setAgentsOpen(false);
+    setMegaOpen((v) => !v);
+  }, []);
+  const toggleAgents = useCallback(() => {
+    setMegaOpen(false);
+    setAgentsOpen((v) => !v);
+  }, []);
 
   // Same-page anchor jumps don't change the pathname, so watch the hash too.
   // Also drop the mobile panel once we cross into the desktop layout, where it
@@ -47,6 +65,7 @@ export function Navbar() {
   useEffect(() => {
     const closeAll = () => {
       setMegaOpen(false);
+      setAgentsOpen(false);
       setOpen(false);
     };
     const desktop = window.matchMedia("(min-width: 1024px)");
@@ -62,9 +81,10 @@ export function Navbar() {
     };
   }, []);
 
-  // Stable identity so the mega-menu's "while open" effect isn't torn down and
+  // Stable identity so the mega-menus' "while open" effects aren't torn down and
   // rebuilt on every Navbar re-render.
   const closeMega = useCallback(() => setMegaOpen(false), []);
+  const closeAgents = useCallback(() => setAgentsOpen(false), []);
 
   return (
     <>
@@ -103,29 +123,34 @@ export function Navbar() {
 
         {/* Primary nav — full-height cells divided by vertical lines, green fill on hover */}
         <nav className="hidden items-stretch lg:flex" aria-label="Primary">
-          {site.nav.map((link) =>
-            link.href === "#solutions" ? (
-              <button
-                key={link.href}
-                type="button"
-                aria-expanded={megaOpen}
-                aria-controls="solutions-mega-menu"
-                onClick={() => setMegaOpen((v) => !v)}
-                className={cn(
-                  "flex items-center gap-1.5 border-l border-white/10 px-5 text-sm font-medium transition-colors duration-200 hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent",
-                  megaOpen ? "bg-accent text-white" : "text-white/80",
-                )}
-              >
-                {link.label}
-                <ChevronDown
-                  aria-hidden
+          {site.nav.map((link) => {
+            if (MENU_TRIGGERS.has(link.href)) {
+              const isAgents = link.href === "#ai-employees";
+              const active = isAgents ? agentsOpen : megaOpen;
+              return (
+                <button
+                  key={link.href}
+                  type="button"
+                  aria-expanded={active}
+                  aria-controls={isAgents ? "ai-employees-mega-menu" : "solutions-mega-menu"}
+                  onClick={isAgents ? toggleAgents : toggleMega}
                   className={cn(
-                    "size-4 transition-transform duration-300",
-                    megaOpen && "rotate-180",
+                    "flex items-center gap-1.5 border-l border-white/10 px-5 text-sm font-medium transition-colors duration-200 hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent",
+                    active ? "bg-accent text-white" : "text-white/80",
                   )}
-                />
-              </button>
-            ) : (
+                >
+                  {link.label}
+                  <ChevronDown
+                    aria-hidden
+                    className={cn(
+                      "size-4 transition-transform duration-300",
+                      active && "rotate-180",
+                    )}
+                  />
+                </button>
+              );
+            }
+            return (
               <Link
                 key={link.href}
                 href={resolve(link.href)}
@@ -133,8 +158,8 @@ export function Navbar() {
               >
                 {link.label}
               </Link>
-            ),
-          )}
+            );
+          })}
         </nav>
 
         {/* Right: Explore + edge-flush CTA, split by vertical lines */}
@@ -180,9 +205,10 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* Desktop mega-menu */}
+      {/* Desktop mega-menus */}
       <div className="hidden lg:block">
         <SolutionsMegaMenu open={megaOpen} onClose={closeMega} />
+        <AgentsMegaMenu open={agentsOpen} onClose={closeAgents} />
       </div>
 
       {/* Mobile panel */}
@@ -192,12 +218,22 @@ export function Navbar() {
           className="fixed inset-x-0 top-16 z-40 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-b border-white/10 bg-black p-4 text-white lg:hidden"
         >
           <ul className="flex flex-col">
-            {site.nav.map((link) =>
-              link.href === "#solutions" ? (
-                <li key={link.href}>
-                  <MobileSolutionsPanel onNavigate={() => setOpen(false)} />
-                </li>
-              ) : (
+            {site.nav.map((link) => {
+              if (link.href === "#solutions") {
+                return (
+                  <li key={link.href}>
+                    <MobileSolutionsPanel onNavigate={() => setOpen(false)} />
+                  </li>
+                );
+              }
+              if (link.href === "#ai-employees") {
+                return (
+                  <li key={link.href}>
+                    <MobileAgentsPanel onNavigate={() => setOpen(false)} />
+                  </li>
+                );
+              }
+              return (
                 <li key={link.href}>
                   <Link
                     href={resolve(link.href)}
@@ -207,8 +243,8 @@ export function Navbar() {
                     {link.label}
                   </Link>
                 </li>
-              ),
-            )}
+              );
+            })}
           </ul>
           <div className="mt-3 flex flex-col gap-2 border-t border-white/10 pt-3">
             <Link

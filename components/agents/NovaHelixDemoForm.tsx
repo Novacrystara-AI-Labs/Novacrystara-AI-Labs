@@ -203,7 +203,7 @@ export function NovaHelixDemoForm() {
       {/* Pinned action bar — always visible, no hunting for the button */}
       <div className="flex shrink-0 flex-col-reverse items-center gap-3 border-t border-border bg-surface-raised px-6 py-4 sm:flex-row sm:justify-between sm:px-8">
         <p className="text-center text-xs leading-relaxed text-muted/70 sm:text-left">
-          30-day money-back guarantee · Founder beta pricing £1,000 one-time
+          Your first month is free · No commitment · Early-access places limited
         </p>
         <button
           type="submit"

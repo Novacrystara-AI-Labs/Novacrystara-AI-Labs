@@ -21,6 +21,7 @@ export const agents: Agent[] = [
       "Screens every resume, calls every candidate, runs Round 1 interviews, and books your panel — 24/7.",
     icon: "Users",
     status: "live",
+    highlights: ["Resume screening", "AI voice calls", "Round 1 interviews", "Panel scheduling"],
   },
   {
     slug: "nova-ledger",

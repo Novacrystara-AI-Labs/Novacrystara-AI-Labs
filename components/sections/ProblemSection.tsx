@@ -20,12 +20,6 @@ const cardSpans = [
 export function ProblemSection() {
   return (
     <Section id="problem" className="relative overflow-hidden">
-      {/* Faint blueprint grid wash behind the section */}
-      <div
-        aria-hidden
-        className="bg-blueprint mask-fade-b pointer-events-none absolute inset-0 -z-10 opacity-60"
-      />
-
       <Reveal className="max-w-3xl">
         <Eyebrow label="The Reality" index={2} />
         <h2 className="mt-5 text-balance text-h2 font-semibold">{problem.heading}</h2>
